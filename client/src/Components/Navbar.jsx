@@ -1,5 +1,6 @@
 import React from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import Cart from './Cart';
 
 const Navbar = () => {
   const isSmallScreen = window.innerWidth <= 660; //
@@ -20,9 +21,10 @@ const Navbar = () => {
           placeholder="Search beers, wine, liquors..."
         />
         <MagnifyingGlassIcon className="absolute w-5 h-5 text-gray-400 left-3" />
-        <button className="ml-4 px-4 py-2 rounded-lg bg-blue-800 text-white">
+        <Cart />
+        {/* <button className="ml-4 px-4 py-2 rounded-lg bg-blue-800 text-white">
           Account
-        </button>
+        </button> */}
       </div>
     </nav>
   );

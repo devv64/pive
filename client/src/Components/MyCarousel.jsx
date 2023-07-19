@@ -22,7 +22,6 @@ const MyCarousel = ({ title, products }) => {
       </button>
     );
   };
-  
 
   return (
     <div className="carousel-container mb-6">
@@ -38,7 +37,8 @@ const MyCarousel = ({ title, products }) => {
             { width: 480, itemsToShow: 2, itemsToScroll: 2 },
             { width: 768, itemsToShow: 4, itemsToScroll: 4 },
           ]}
-          transitionMs={500}
+          transitionMs={700}
+          enableMouseSwipe={false}
         >
           {products.map((product) => (
             <div key={product.id} className="carousel-item">
