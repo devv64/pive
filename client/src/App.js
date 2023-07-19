@@ -1,6 +1,8 @@
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import MyCarousel from './Components/MyCarousel';
+import Product from './Components/Product';
 
 function App() {
   const products = [
@@ -78,15 +80,35 @@ function App() {
     },
   ];
 
-  return (
-    <div className="Pive">
-      <Navbar />
-      <div className='h-40'></div>
-      <MyCarousel title="FEATURED" products={products} />
-      <MyCarousel title="SUMMER SPECIALS" products={products} />
-      <div className="h-[200vh]"></div>
+  const Home = () => { return (
+    <div>
+      <div className='mb-40'>
+        <h1>Home</h1>
+        <p>Welcome to the home page!</p>
+      </div>
+        <MyCarousel title="Featured" products={products} />
     </div>
+  )}
+
+
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/products"
+            element={<MyCarousel title="Featured" products={products} />}
+          />
+          <Route
+            path="/products/:productId"
+            element={<Product products={products} />}
+          />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
