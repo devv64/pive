@@ -37,8 +37,10 @@ const MyCarousel = ({ title, products }) => {
             { width: 0, itemsToShow: 1, itemsToScroll: 1 },
             { width: 480, itemsToShow: 2, itemsToScroll: 2 },
             { width: 768, itemsToShow: 4, itemsToScroll: 4 },
+            { width: 1200, itemsToShow: 6, itemsToScroll: 6 },
           ]}
           transitionMs={1000}
+          enableMouseSwipe={false}
         >
           {products.map((product) => (
             <Link key={product.id} to={`/products/${product.id}`}>
@@ -51,6 +53,9 @@ const MyCarousel = ({ title, products }) => {
                   />
                   <h3 className="text-sm font-semibold leading-tight mb-2">
                     {product.name}
+                  </h3>
+                  <h3 className="text-sm leading-tight mb-2">
+                    {product.size}
                   </h3>
                   <p className="text-sm font-medium text-gray-600">
                     {product.price}
