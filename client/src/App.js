@@ -11,6 +11,32 @@ function App() {
       name: 'Product 1',
       image: 'https://dydza6t6xitx6.cloudfront.net/mi-matua-sauvignon-blanc-f32bbce18f88bcdb.jpeg?fm=jpg&auto=format%2Ccompress&ch=Width%2CDPR&h=240&q=20&dpr=2',
       price: '$10.99',
+      tags: 'liquor vodka',
+      size: '750ml bottle',
+    },
+    {
+      id: 13,
+      name: 'Product 1',
+      image: 'https://dydza6t6xitx6.cloudfront.net/mi-matua-sauvignon-blanc-f32bbce18f88bcdb.jpeg?fm=jpg&auto=format%2Ccompress&ch=Width%2CDPR&h=240&q=20&dpr=2',
+      price: '$15.99',
+      tags: 'liquor vodka',
+      size: '1 liter bottle',
+    },
+    {
+      id: 14,
+      name: 'Product 1',
+      image: 'https://dydza6t6xitx6.cloudfront.net/mi-matua-sauvignon-blanc-f32bbce18f88bcdb.jpeg?fm=jpg&auto=format%2Ccompress&ch=Width%2CDPR&h=240&q=20&dpr=2',
+      price: '$17.99',
+      tags: 'liquor vodka',
+      size: '750ml plastic bottle',
+    },
+    {
+      id: 15,
+      name: 'Product 1',
+      image: 'https://dydza6t6xitx6.cloudfront.net/mi-matua-sauvignon-blanc-f32bbce18f88bcdb.jpeg?fm=jpg&auto=format%2Ccompress&ch=Width%2CDPR&h=240&q=20&dpr=2',
+      price: '$19.99',
+      tags: 'liquor vodka',
+      size: '1 liter plastic bottle',
     },
     {
       id: 2,
@@ -82,10 +108,6 @@ function App() {
 
   const Home = () => { return (
     <div>
-      <div className='mb-40'>
-        <h1>Home</h1>
-        <p>Welcome to the home page!</p>
-      </div>
         <MyCarousel title="Featured" products={products} />
     </div>
   )}
@@ -95,6 +117,7 @@ function App() {
     <Router>
       <div className="App">
         <Navbar />
+        <div className="mb-40"> </div>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
