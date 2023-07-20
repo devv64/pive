@@ -11,7 +11,13 @@ class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
     size = models.CharField(max_length=30)
     image_url = models.CharField(max_length=300) #change to imagefield
-    stores = models.ManyToManyField(Store) # implement "through" class for store possession of product
+    stores = models.ManyToManyField(Store, through="ProductStoreInfo") # implement "through" class for store possession of product
+
+class ProductStoreInfo(models.Model):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    stock = models.IntegerField()
 
 class DrinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,4 +30,8 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ["drink", "size", "image_url", "stores"]
-    
+
+class ProductStoreInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductStoreInfo
+        fields = ["price", "stock"]
