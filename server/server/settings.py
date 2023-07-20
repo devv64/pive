@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework', 
+    'order',
+    'product',
+    'stores',
 ]
 
 MIDDLEWARE = [
@@ -68,6 +72,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'server.wsgi.application'
+
+REST_FRAMEWORK = {
+    #read only for unauth'd users 
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 
 # Database
