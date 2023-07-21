@@ -24,11 +24,17 @@ Category.objects.get_or_create(name="Gin", parent=liqour)
 Category.objects.get_or_create(name="Lager", parent=beer)
 Category.objects.get_or_create(name="HardSeltzer", parent=beer)
 
-user = authenticate(username="arjun", password="pass123")
-if not user:
-    user = User.objects.create_user("arjun","arjun@gmail.com","pass123")
+user1 = authenticate(username="arjun", password="pass123")
+if not user1:
+    user1 = User.objects.create_user("arjun","arjun@gmail.com","pass123")
 
-store, _ = Store.objects.get_or_create(user=user, name="arjun's alc", location = "54 sample st, NJ", available=True)
+user2 = authenticate(username="dev", password="dev123")
+if not user2:
+    user2 = User.objects.create_user("dev","dev@gmail.com","dev123")
+
+store1, _ = Store.objects.get_or_create(user=user1, name="arjun's alc", location = "54 sample st, NJ", available=True)
+store2, _ = Store.objects.get_or_create(user=user2, name="dev's alc", location = "1 sample st, NJ", available=True)
+
 
 with open('pive_sample_product_data.csv', 'r', encoding='utf-8-sig') as product_file:
     csv_reader = csv.DictReader(product_file)
@@ -41,11 +47,13 @@ with open('pive_sample_product_data.csv', 'r', encoding='utf-8-sig') as product_
             break
         drink, _ = Drink.objects.get_or_create(category=category, name=line['drink_name'], description=line['drink_description'])
         line['featured'] = True if line['featured'] == "TRUE" else False
-        product, exists = Product.objects.get_or_create(drink=drink, size=line['size'], image_url=line['image_url'], featured=line['featured'])
-        if not exists:
+        product, not_exists = Product.objects.get_or_create(drink=drink, size=line['size'], image_url=line['image_url'], featured=line['featured'])
+        if not_exists:
             line['price'] = line['price'][1:]
-            prodstoreinfo = ProductStoreInfo(product=product, store=store, price=float(line['price']), stock=random.randint(5,30))
-            prodstoreinfo.save()
+            price = float(line['price'])
+            ProductStoreInfo.objects.get_or_create(product=product, store=store1, price=price, stock=random.randint(5,30))
+            price = price + random.randint(-5,5)
+            ProductStoreInfo.objects.get_or_create(product=product, store=store2, price=price, stock=random.randint(5,30))
 
         
         

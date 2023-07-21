@@ -32,20 +32,28 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ["name"]
 
 class DrinkSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Drink
         fields = ["name", "description", "category"]
+        
+class ProductStoreInfoSerializer(serializers.ModelSerializer):
+    store = StoreSerializer(read_only=True)
+    class Meta:
+        model = ProductStoreInfo
+        fields = ["store", "price", "stock"]
 
 class ProductSerializer(serializers.ModelSerializer):
     drink = DrinkSerializer(read_only=True)
-    stores = StoreSerializer(many=True, read_only=True)
+    productstoreinfo_set = ProductStoreInfoSerializer(read_only=True, many=True)
     class Meta:
         model = Product
-        fields = ["drink", "size", "image_url", "stores"]
+        fields = ["id", "drink", "size", "image_url", "productstoreinfo_set"]
 
-class ProductStoreInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductStoreInfo
-        fields = ["price", "stock"]
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["productstoreinfo_set"] = sorted(
+            representation["productstoreinfo_set"], key=lambda x: x["price"], reverse=False
+        )
+        return representation

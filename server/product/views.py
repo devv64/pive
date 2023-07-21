@@ -73,6 +73,14 @@ def get_all(request):
 def get_by_id(request, id):
     product = Product.objects.get(id=id)
     data = ProductSerializer(product).data
+
+    # Get other products with the same product.drink.name but other product.size
+    other_products = Product.objects.filter(
+        drink__name=product.drink.name, size__neq=product.size
+    )
+
+    data["other_products"] = ProductSerializer(other_products, many=True).data
+
     return Response(data)
 
 @api_view(['GET'])
