@@ -6,18 +6,19 @@ from mptt.models import MPTTModel, TreeForeignKey
 # Create your models here.
 class Category(MPTTModel):
     name = models.CharField(max_length=15, unique=True)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True,related_name='children')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
 class Drink(models.Model):
+    category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
 
 class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
     size = models.CharField(max_length=30)
-    image_url = models.CharField(max_length=300) #change to imagefield
-    stores = models.ManyToManyField(Store, through="ProductStoreInfo") # implement "through" class for store possession of product
+    image_url = models.CharField(max_length=300) 
+    featured = models.BooleanField(default=False)
+    stores = models.ManyToManyField(Store, through="ProductStoreInfo")
 
 class ProductStoreInfo(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
@@ -25,11 +26,17 @@ class ProductStoreInfo(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     stock = models.IntegerField()
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["name"]
 
 class DrinkSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
+
     class Meta:
         model = Drink
-        fields = ["name", "description"]
+        fields = ["name", "description", "category"]
 
 class ProductSerializer(serializers.ModelSerializer):
     drink = DrinkSerializer(read_only=True)

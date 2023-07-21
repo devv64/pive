@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 REST_FRAMEWORK = {
     #read only for unauth'd users 
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
     ]
 }
 
