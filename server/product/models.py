@@ -16,8 +16,9 @@ class Drink(models.Model):
 class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
     size = models.CharField(max_length=30)
-    image_url = models.CharField(max_length=300) #change to imagefield
-    stores = models.ManyToManyField(Store, through="ProductStoreInfo") # implement "through" class for store possession of product
+    image_url = models.CharField(max_length=300) 
+    featured = models.BooleanField()
+    stores = models.ManyToManyField(Store, through="ProductStoreInfo")
 
 class ProductStoreInfo(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
