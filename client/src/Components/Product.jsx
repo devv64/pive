@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import ProductImage from './ProductImage';
 import ProductDetails from './ProductDetails';
+import { useState, useEffect } from 'react';
 
 const Product = ({ products }) => {
   const { productId } = useParams();
@@ -12,20 +13,20 @@ const Product = ({ products }) => {
   }
 
   const productsByName = products.reduce((acc, product) => {
-    if (!acc[product.name]) {
-      acc[product.name] = [];
+    if (!acc[product.drink.name]) {
+      acc[product.drink.name] = [];
     }
-    acc[product.name].push(product);
+    acc[product.drink.name].push(product);
     return acc;
   }, {});
 
-  const productSizes = productsByName[product.name];
+  const productSizes = productsByName[product.drink.name];
   
   return (
     <div className="flex flex-col items-center justify-center mt-8">
       <div className="flex flex-col md:flex-row items-center p-8 w-full max-w-md">
-        <ProductImage src={product.image} alt={product.name} />
-        <ProductDetails name={product.name} price={product.price} productSizes={productSizes} />
+        <ProductImage src={product.image_url} alt={product.drink.name} />
+        <ProductDetails name={product.drink.name} price={product.productstoreinfo_set[0].price} productSizes={productSizes} />
       </div>
     </div>
   );

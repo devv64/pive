@@ -41,7 +41,7 @@ const ProductDetails = ({ name, price, productSizes }) => {
           </div>
         ))}
       </div>
-      <p className="text-gray-600 text-lg mb-4">{price}</p>
+      <p className="text-gray-600 text-lg mb-4">${price}</p>
       <button className="bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none">
         Add to Cart
       </button>
