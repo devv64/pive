@@ -22,24 +22,24 @@ const ProductDetails = ({ name, price, productSizes }) => {
           <option value="3">3</option>
         </select>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-      {productSizes.map((sizeProduct) => (
-        <Link key={sizeProduct.id} to={`/products/${sizeProduct.id}`}>
-          <motion.button
-            className={`w-full h-full p-2 rounded-lg bg-white text-black border-black ${
-              location.pathname === `/products/${sizeProduct.id}`
-                ? 'border-blue-600'
-                : ''
-            } border transition-colors duration-300 focus:outline-none overflow-hidden`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <span className={location.pathname === `/products/${sizeProduct.id}` ? 'text-blue-600' : ''}>
-              {sizeProduct.size}
-            </span>
-          </motion.button>
-        </Link>
-      ))}
+      <div className="grid-carousel-container flex overflow-x-auto mb-4">
+        {productSizes.map((sizeProduct) => (
+          <div key={sizeProduct.id} className="grid-carousel-item mr-4">
+            <Link to={`/products/${sizeProduct.id}`}>
+              <motion.button
+                className={`w-20 h-20 m-4 rounded-lg bg-white text-black border ${
+                  location.pathname === `/products/${sizeProduct.id}` ? 'border-blue-600' : 'border-black'
+                } transition-colors duration-300 focus:outline-none overflow-hidden whitespace-normal`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <span className={location.pathname === `/products/${sizeProduct.id}` ? 'text-blue-600' : ''}>
+                  {sizeProduct.size}
+                </span>
+              </motion.button>
+            </Link>
+          </div>
+        ))}
       </div>
       <p className="text-gray-600 text-lg mb-4">{price}</p>
       <button className="bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none">
