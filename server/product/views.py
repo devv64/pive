@@ -29,7 +29,7 @@ def create(request):
     # Create or update Store objects and associated ProductStoreInfo
     for store_data in stores_data:
         store_name = store_data.get('name')
-        store, _ = Store.objects.get_or_create(name=store_name)
+        store, _ = Store.objects.get_or_create(name=store_name, location = store_data['location'], available=store_data['available'])
         product_store_info_data = {
             'store': store,
             'price': store_data.get('price', 0),
