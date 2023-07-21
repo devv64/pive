@@ -3,8 +3,33 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import MyCarousel from './Components/MyCarousel';
 import Product from './Components/Product';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  function fetchProducts() {
+    const api = 'http://127.0.0.1:8000/products/all';
+
+    fetch(api, {
+      method: 'GET',
+
+    })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setData(result);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
   const products = [
     {
       id: 1,
@@ -106,12 +131,13 @@ function App() {
     },
   ];
 
-  const Home = () => { return (
-    <div>
-        <MyCarousel title="Featured" products={products} />
-    </div>
-  )}
-
+  const Home = () => {
+    return (
+      <div>
+        <MyCarousel title="Featured" products={data} />
+      </div>
+    );
+  };
 
   return (
     <Router>
@@ -126,12 +152,12 @@ function App() {
           />
           <Route
             path="/products/:productId"
-            element={<Product products={products} />}
+            element={<Product products={data} />}
           />
         </Routes>
       </div>
     </Router>
   );
-};
+}
 
 export default App;

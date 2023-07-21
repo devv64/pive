@@ -1,0 +1,25 @@
+.grid-carousel-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .grid-carousel-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+  
+  .grid-carousel-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+  }
+  
+  .grid-carousel-item {
+    margin-right: 1rem;
+  }
+  
+.grid-carousel-item {
+  min-width: 16rem; /* Set a minimum width for consistent spacing */
+}
+
+.grid-carousel-item:not(:last-child) {
+  margin-right: 1rem; /* Space between items */
+}
+
