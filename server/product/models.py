@@ -12,6 +12,7 @@ class Drink(models.Model):
     category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     description = models.TextField()
+    featured = models.BooleanField(default=False)
 
 class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="products")

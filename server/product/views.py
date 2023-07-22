@@ -102,3 +102,9 @@ def get_drink_by_id(request, id):
     drink = Drink.objects.get(pk=id)
     serializer = DrinkSerializer(instance=drink)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def get_featured_drinks(request, id):
+    drinks = Drink.objects.filter(featured=True)
+    serializer = DrinkSerializer(drinks)
+    return Response(serializer.data)
