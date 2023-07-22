@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import ProductImage from './ProductImage';
 import ProductDetails from './ProductDetails';
-import { useState, useEffect } from 'react';
 
 const Product = ({ products }) => {
   const { productId } = useParams();
@@ -21,10 +20,11 @@ const Product = ({ products }) => {
   }, {});
 
   const productSizes = productsByName[product.drink.name];
-  
+
   return (
     <div className="flex flex-col items-center justify-center mt-8">
-      <div className="flex flex-col md:flex-row items-center p-8 w-full max-w-md">
+      <h3 className="text-lg font-semibold mb-2">Category: {product.drink.category.name}</h3>
+      <div className="flex flex-col md:flex-row items-center p-8 w-full max-w-6xl">
         <ProductImage src={product.image_url} alt={product.drink.name} />
         <ProductDetails name={product.drink.name} price={product.productstoreinfo_set[0].price} productSizes={productSizes} />
       </div>

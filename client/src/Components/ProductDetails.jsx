@@ -8,20 +8,6 @@ const ProductDetails = ({ name, price, productSizes }) => {
   return (
     <div className="md:w-1/2">
       <h2 className="text-3xl font-bold mb-2">{name}</h2>
-      <div className="flex flex-col md:flex-row mb-4">
-        <label htmlFor="quantity" className="mr-2 text-sm">
-          Quantity:
-        </label>
-        <select
-          id="quantity"
-          name="quantity"
-          className="border rounded-lg px-4 py-2 w-24 focus:outline-none"
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </div>
       <div className="grid-carousel-container flex overflow-x-auto mb-4">
         {productSizes.map((sizeProduct) => (
           <div key={sizeProduct.id} className="grid-carousel-item mr-4">
@@ -41,10 +27,26 @@ const ProductDetails = ({ name, price, productSizes }) => {
           </div>
         ))}
       </div>
-      <p className="text-gray-600 text-lg mb-4">${price}</p>
-      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none">
-        Add to Cart
-      </button>
+      <p className="text-gray-600 text-lg mb-4">Price: ${price}</p>
+      <div className="mb-4">
+        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-2">
+          Quantity:
+        </label>
+        <div className="flex flex-col md:flex-row">
+          <select
+            id="quantity"
+            name="quantity"
+            className="border rounded-lg px-4 py-2 w-24 focus:outline-none md:mr-2"
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 md:mt-0 md:ml-4 focus:outline-none">
+            Add to Cart
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
