@@ -84,27 +84,19 @@ def get_by_id(request, id):
     return Response(data)
 
 @api_view(['GET'])
-def get_by_category(request, category):
-    products = Product.objects.filter(drink__category__name=category)
-    a = Product.objects.get(id=1)
-    print(a.drink)
-    data = ProductSerializer(products, many=True).data
-    return Response(data)
-
-@api_view(['GET'])
-def get_featured(request):
-    products = Product.objects.filter(featured=True)
-    data = ProductSerializer(products, many=True).data
-    return Response(data)
+def get_carousel_drinks_by_category(request, category):
+    drinks = Drink.objects.filter(category__name=category)
+    serializer = CarouselDrinkSerializer(drinks, many=True)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def get_drink_by_id(request, id):
     drink = Drink.objects.get(pk=id)
-    serializer = DrinkSerializer(instance=drink, many=True)
+    serializer = DrinkSerializer(instance=drink)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_featured_drinks(request):
+def get_carousel_featured_drinks(request):
     drinks = Drink.objects.filter(featured=True)
-    serializer = DrinkSerializer(drinks, many=True)
+    serializer = CarouselDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
