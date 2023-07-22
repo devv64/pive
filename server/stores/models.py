@@ -12,10 +12,8 @@ class Store(models.Model):
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
-        fields = ["name", "location", "available"]
-    
-    def create(self, validated_data):
-        store = Store.objects.create(**validated_data)
+        fields = ["id","name", "location", "available"]
+
         
 
     
