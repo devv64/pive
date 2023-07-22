@@ -46,8 +46,10 @@ with open('pive_sample_product_data.csv', 'r', encoding='utf-8-sig') as product_
             print(line['category'])
             break
         drink, _ = Drink.objects.get_or_create(category=category, name=line['drink_name'], description=line['drink_description'])
-        line['featured'] = True if line['featured'] == "TRUE" else False
-        product, not_exists = Product.objects.get_or_create(drink=drink, size=line['size'], image_url=line['image_url'], featured=line['featured'])
+        if line['featured'] == "TRUE":
+            drink.featured = True
+            drink.save()
+        product, not_exists = Product.objects.get_or_create(drink=drink, size=line['size'], image_url=line['image_url'])
         if not_exists:
             line['price'] = line['price'][1:]
             price = float(line['price'])
