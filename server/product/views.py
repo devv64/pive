@@ -100,11 +100,11 @@ def get_featured(request):
 @api_view(['GET'])
 def get_drink_by_id(request, id):
     drink = Drink.objects.get(pk=id)
-    serializer = DrinkSerializer(instance=drink)
+    serializer = DrinkSerializer(instance=drink, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_featured_drinks(request, id):
+def get_featured_drinks(request):
     drinks = Drink.objects.filter(featured=True)
-    serializer = DrinkSerializer(drinks)
+    serializer = DrinkSerializer(drinks, many=True)
     return Response(serializer.data)
