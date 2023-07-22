@@ -51,9 +51,16 @@ with open('pive_sample_product_data.csv', 'r', encoding='utf-8-sig') as product_
         if not_exists:
             line['price'] = line['price'][1:]
             price = float(line['price'])
-            ProductStoreInfo.objects.get_or_create(product=product, store=store1, price=price, stock=random.randint(5,30))
+            try: 
+                ProductStoreInfo.objects.get(product=product, store=store1, price=price)
+            except:
+                ProductStoreInfo.objects.create(product=product, store=store1, price=price, stock=random.randint(5,30))
             price = price + random.randint(-5,5)
-            ProductStoreInfo.objects.get_or_create(product=product, store=store2, price=price, stock=random.randint(5,30))
+
+            try:
+                ProductStoreInfo.objects.get_or_create(product=product, store=store2, price=price)
+            except:
+                ProductStoreInfo.objects.create(product=product, store=store2, price=price, stock=random.randint(5,30))
 
         
         
