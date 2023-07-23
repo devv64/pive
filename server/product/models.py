@@ -12,9 +12,10 @@ class Drink(models.Model):
     category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     description = models.TextField()
+    featured = models.BooleanField(default=False)
 
 class Product(models.Model):
-    drink = models.ForeignKey(Drink, on_delete=models.CASCADE)
+    drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="products")
     size = models.CharField(max_length=30)
     image_url = models.CharField(max_length=300) 
     featured = models.BooleanField(default=False)
@@ -30,13 +31,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["name"]
-
-class DrinkSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-
-    class Meta:
-        model = Drink
-        fields = ["name", "description", "category"]
         
 class ProductStoreInfoSerializer(serializers.ModelSerializer):
     store = StoreSerializer(read_only=True)
@@ -45,15 +39,37 @@ class ProductStoreInfoSerializer(serializers.ModelSerializer):
         fields = ["store", "price", "stock"]
 
 class ProductSerializer(serializers.ModelSerializer):
-    drink = DrinkSerializer(read_only=True)
-    productstoreinfo_set = ProductStoreInfoSerializer(read_only=True, many=True)
+    carrying_stores = ProductStoreInfoSerializer(source="productstoreinfo_set",many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ["id", "drink", "size", "image_url", "productstoreinfo_set"]
+        fields = ["id", "size", "image_url", "carrying_stores"]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["productstoreinfo_set"] = sorted(
-            representation["productstoreinfo_set"], key=lambda x: x["price"], reverse=False
+        representation["carrying_stores"] = sorted(
+            representation["carrying_stores"], key=lambda x: x["price"], reverse=False
         )
         return representation
+
+class DrinkSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True)
+
+    class Meta:
+        model = Drink
+        fields = ["name", "description", "products"]
+
+
+class CarouselDrinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Drink
+        fields = ["name"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        first_prod = Product.objects.filter(drink=instance).first()
+        first_prod_price = ProductStoreInfo.objects.filter(product=first_prod).order_by("-price").first().price
+        rep["product"] = {
+            "size":first_prod.size,
+            "price": first_prod_price,
+        }
+        return rep
