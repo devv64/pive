@@ -85,7 +85,7 @@ def get_by_id(request, id):
 
 @api_view(['GET'])
 def get_carousel_drinks_by_category(request, category):
-    categories = Category.objects.get(name=category).get_children()
+    categories = Category.objects.get(name=category).get_descendants()
     drinks = Drink.objects.filter(category__in=categories)
     serializer = CarouselDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
