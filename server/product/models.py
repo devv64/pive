@@ -64,7 +64,7 @@ class CarouselDrinkSerializer(serializers.ModelSerializer):
         model = Drink
         fields = ["id", "name"]
 
-    def to_representation(self, instance):
+    def to_representation(self, instance): # some error handling here wouldnt hurt
         rep = super().to_representation(instance)
         first_prod = Product.objects.filter(drink=instance).first()
         first_prod_price = ProductStoreInfo.objects.filter(product=first_prod).order_by("-price").first().price
