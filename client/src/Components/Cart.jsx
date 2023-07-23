@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useCartContext } from './CartContext';
 
 
 const Cart = () => {
@@ -10,14 +11,8 @@ const Cart = () => {
       setCartVisible(!isCartVisible);
     };
   
-    // Dummy cart items
-    const cartItems = [
-      { id: 1, name: 'Item 1', price: '$10.99' },
-      { id: 2, name: 'Item 2', price: '$12.99' },
-      { id: 3, name: 'Item 3', price: '$14.99' },
-      { id: 4, name: 'Item 4', price: '$16.99' },
-    ];
-  
+    const { cartItems } = useCartContext();
+
     return (
       <div className="relative ml-4">
         <button

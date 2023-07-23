@@ -1,9 +1,20 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useCartContext } from './CartContext';
 
 const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
+  const { addToCart } = useCartContext();
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: selectedSize.id,
+      name,
+      price,
+      quantity: 1,
+    });
+  };
 
   return (
     <div className="md:w-1/2">
@@ -17,7 +28,7 @@ const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange 
               } transition-colors duration-300 focus:outline-none overflow-hidden whitespace-normal`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              onClick={() => onSizeChange(sizeProduct)} // Call the size change handler when the button is clicked
+              onClick={() => onSizeChange(sizeProduct)}
             >
               <span className={selectedSize.id === sizeProduct.id ? 'text-blue-600' : ''}>
                 {sizeProduct.size}
@@ -41,7 +52,9 @@ const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange 
             <option value="2">2</option>
             <option value="3">3</option>
           </select>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 md:mt-0 md:ml-4 focus:outline-none">
+          <button 
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 md:mt-0 md:ml-4 focus:outline-none"
+            onClick={handleAddToCart}>
             Add to Cart
           </button>
         </div>
