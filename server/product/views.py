@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.renderers import JSONRenderer
-from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
+
 
 from .models import *
 # Create your views here.
@@ -85,17 +85,23 @@ def get_by_id(request, id):
 
 @api_view(['GET'])
 def get_carousel_drinks_by_category(request, category):
-    categories = Category.objects.get(name=category).get_children()
-    drinks = Drink.objects.filter(category__in=categories)
-    serializer = CarouselDrinkSerializer(drinks, many=True)
-    return Response(serializer.data)
+    try:
+        categories = Category.objects.get(name=category).get_descendants()
+        drinks = Drink.objects.filter(category__in=categories)
+        serializer = CarouselDrinkSerializer(drinks, many=True)
+        return Response(serializer.data)
+    except ObjectDoesNotExist:
+        return Response({"error":"Category not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def get_drink_by_id(request, id):
-    drink = Drink.objects.get(pk=id)
-    serializer = DrinkSerializer(instance=drink)
-    return Response(serializer.data)
-
+    try:
+        drink = Drink.objects.get(pk=id)
+        serializer = DrinkSerializer(instance=drink)
+        return Response(serializer.data)
+    except ObjectDoesNotExist:
+        return Response({"error":"Drink not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 @api_view(['GET'])
 def get_carousel_featured_drinks(request):
     drinks = Drink.objects.filter(featured=True)
