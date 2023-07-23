@@ -1,19 +1,20 @@
 import React from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import Cart from './Cart';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const isSmallScreen = window.innerWidth <= 660; //
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
-      <div className="flex items-center w-full sm:w-auto">
+      <Link to="/" className="flex items-center w-full sm:w-auto">
         <h1
             className={`text-white text-5xl ${isSmallScreen ? 'mx-auto' : 'ml-8'} py-4`}
           >
             Pive
         </h1>
-      </div>
+      </Link>
       <div className="relative flex items-center w-full sm:w-auto mt-4 sm:mt-0">
         <input
           type="text"
