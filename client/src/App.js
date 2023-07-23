@@ -5,6 +5,7 @@ import Navbar from './Components/Navbar';
 import MyCarousel from './Components/MyCarousel';
 import Product from './Components/Product';
 import Checkout from './Components/Checkout';
+import CartProvider from './Components/CartContext';
 import { getFeaturedProducts } from './api/products';
 
 function App() {
@@ -26,27 +27,33 @@ function App() {
   };
 
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <div className="mb-40"> </div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/products"
-            element={<MyCarousel title="Featured" products={data} />}
-          />
-          <Route
-            path="/products/:productId"
-            element={<Product />}
-          />
-          <Route
-            path="/checkout"
-            element={<Checkout />}
-          />
-        </Routes>
-      </div>
-    </Router>
+    <CartProvider>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <div className="mb-40"></div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/products"
+              element={<MyCarousel title="Featured" products={data} />}
+            />
+            <Route
+              path="/products/:productId"
+              element={<Product />}
+            />
+            <Route
+              path="/checkout"
+              element={<Checkout />}
+            />
+            <Route
+              path="*"
+              element={<h1>404 Not Found</h1>}
+            />
+          </Routes>
+        </div>
+      </Router>
+    </CartProvider>
   );
 }
 
