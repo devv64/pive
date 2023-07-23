@@ -5,32 +5,17 @@ import Navbar from './Components/Navbar';
 import MyCarousel from './Components/MyCarousel';
 import Product from './Components/Product';
 import Checkout from './Components/Checkout';
+import { getFeaturedProducts } from './api/products';
 
 function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchProducts();
+    getFeaturedProducts()
+      .then((result) => {
+        setData(result);
+      });
   }, []);
-
-  function fetchProducts() {
-    const api = 'http://127.0.0.1:8000/products/all';
-
-    fetch(api, {
-      method: 'GET',
-
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setData(result);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  }
-
 
   const Home = () => {
     return (
@@ -53,7 +38,7 @@ function App() {
           />
           <Route
             path="/products/:productId"
-            element={<Product products={data} />}
+            element={<Product />}
           />
           <Route
             path="/checkout"

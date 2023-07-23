@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const ProductDetails = ({ name, price, productSizes }) => {
+const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
 
   return (
@@ -11,19 +11,18 @@ const ProductDetails = ({ name, price, productSizes }) => {
       <div className="grid-carousel-container flex overflow-x-auto mb-4">
         {productSizes.map((sizeProduct) => (
           <div key={sizeProduct.id} className="grid-carousel-item mr-4">
-            <Link to={`/products/${sizeProduct.id}`}>
-              <motion.button
-                className={`w-20 h-20 m-4 rounded-lg bg-white text-black border ${
-                  location.pathname === `/products/${sizeProduct.id}` ? 'border-blue-600' : 'border-black'
-                } transition-colors duration-300 focus:outline-none overflow-hidden whitespace-normal`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <span className={location.pathname === `/products/${sizeProduct.id}` ? 'text-blue-600' : ''}>
-                  {sizeProduct.size}
-                </span>
-              </motion.button>
-            </Link>
+            <motion.button
+              className={`w-20 h-20 m-4 rounded-lg bg-white text-black border ${
+                selectedSize.id === sizeProduct.id ? 'border-blue-600' : 'border-black'
+              } transition-colors duration-300 focus:outline-none overflow-hidden whitespace-normal`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => onSizeChange(sizeProduct)} // Call the size change handler when the button is clicked
+            >
+              <span className={selectedSize.id === sizeProduct.id ? 'text-blue-600' : ''}>
+                {sizeProduct.size}
+              </span>
+            </motion.button>
           </div>
         ))}
       </div>
