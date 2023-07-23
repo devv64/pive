@@ -62,7 +62,7 @@ class DrinkSerializer(serializers.ModelSerializer):
 class CarouselDrinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Drink
-        fields = ["name"]
+        fields = ["id", "name"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
