@@ -47,18 +47,18 @@ const MyCarousel = ({ title, products }) => {
               <div className="carousel-item">
                 <div className="flex flex-col items-center justify-start px-4 py-6 mb-6 bg-white rounded-lg shadow-lg">
                   <img
-                    src={product.image_url}
-                    alt={product.drink.name}
+                    src={product.product.image_url}
+                    alt={product.name}
                     className="w-32 h-48 object-contain mb-4 rounded-lg"
                   />
                   <h3 className="text-sm font-semibold leading-tight mb-2">
-                    {product.drink.name}
+                    {product.name}
                   </h3>
                   <h3 className="text-sm leading-tight mb-2">
                     {product.size}
                   </h3>
                   <p className="text-sm font-medium text-gray-600">
-                    ${product.productstoreinfo_set[0].price}
+                    ${product.product.price}
                   </p>
                 </div>
               </div>

@@ -40,9 +40,10 @@ class ProductStoreInfoSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     carrying_stores = ProductStoreInfoSerializer(source="productstoreinfo_set",many=True, read_only=True)
+    drink_name = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ["id", "size", "image_url", "carrying_stores"]
+        fields = ["id", "drink_name", "size", "image_url", "carrying_stores"]
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -50,6 +51,9 @@ class ProductSerializer(serializers.ModelSerializer):
             representation["carrying_stores"], key=lambda x: x["price"], reverse=False
         )
         return representation
+    
+    def get_drink_name(self, instance):
+        return instance.drink.name if instance.drink else None
 
 class DrinkSerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True)
@@ -72,6 +76,7 @@ class CarouselDrinkSerializer(serializers.ModelSerializer):
         first_prod_price = ProductStoreInfo.objects.filter(product=first_prod).order_by("-price").first().price
         rep["product"] = {
             "size":first_prod.size,
+            "image_url":first_prod.image_url,
             "price": first_prod_price,
         }
         return rep
