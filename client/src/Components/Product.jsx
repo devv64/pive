@@ -42,8 +42,8 @@ const Product = () => {
           name={selectedProduct.name}
           price={selectedSize.carrying_stores[0].price}
           selectedSize={selectedSize}
-          productSizes={productSizes} // Pass all available sizes to the ProductDetails component
-          onSizeChange={handleSizeChange} // Pass the size change handler to ProductDetails
+          productSizes={productSizes}
+          onSizeChange={handleSizeChange}
         />
       </div>
     </div>
