@@ -5,7 +5,7 @@ import { useCartContext } from './CartContext';
 
 const Cart = () => {
   const [isCartVisible, setCartVisible] = useState(false);
-  const cartRef = useRef(null); // Create a ref to the cart container
+  const cartRef = useRef(null);
 
   const toggleCartVisibility = () => {
     setCartVisible(!isCartVisible);
@@ -13,27 +13,22 @@ const Cart = () => {
 
   const { cartItems } = useCartContext();
 
-  // Add event listeners when the cart component mounts
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      // Close the cart if the click is outside the cart component
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setCartVisible(false);
       }
     };
 
     const handleEscKeyPress = (event) => {
-      // Close the cart if the "Esc" key is pressed
       if (event.keyCode === 27) {
         setCartVisible(false);
       }
     };
 
-    // Attach the event listeners
     document.addEventListener('mousedown', handleOutsideClick);
     document.addEventListener('keydown', handleEscKeyPress);
 
-    // Clean up the event listeners when the cart component unmounts
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
       document.removeEventListener('keydown', handleEscKeyPress);
@@ -57,7 +52,6 @@ const Cart = () => {
           transition={{ duration: 0.3 }}
           className="absolute right-0 mt-2 p-4 bg-white shadow-lg rounded-lg z-10"
         >
-          {/* Cart content */}
           <h3 className="text-lg font-semibold mb-4">Your Cart</h3>
           <ul>
             {cartItems.map((item) => (

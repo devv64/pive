@@ -22,7 +22,7 @@ const TotalSection = ({ cart }) => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  const deliveryFee = 5; // Example delivery fee
+  const deliveryFee = 5;
 
   return (
     <div className="mb-6">
@@ -82,7 +82,6 @@ const DeliveryInfoSection = () => {
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Delivery Info</h2>
-      {/* Add fields for estimated arrival time and any other relevant delivery information */}
     </div>
   );
 };
@@ -91,7 +90,6 @@ const Checkout = () => {
   const [cart, setCart] = useState([
     { id: 1, name: 'Item 1', price: 10, quantity: 2 },
     { id: 2, name: 'Item 2', price: 20, quantity: 1 },
-    // Add more items to the cart as needed
   ]);
 
   const [contactInfo, setContactInfo] = useState({
@@ -106,11 +104,9 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: Implement Stripe Checkout integration here.
-    // For demonstration purposes, we'll just log the data for now.
     const checkoutData = {
       cart,
       contactInfo,
-      // Add other relevant data for the order confirmation page
     };
     console.log(checkoutData);
     navigate('/order-confirmation');
@@ -143,7 +139,7 @@ const Checkout = () => {
         </form>
       </main>
       <footer className="mt-4 text-center">
-        <p className="text-sm">© 2023 My Company. All rights reserved.</p>
+        <p className="text-sm">© 2023 OrderPive. All rights reserved.</p>
       </footer>
     </div>
   );
