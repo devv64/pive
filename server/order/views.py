@@ -12,7 +12,7 @@ stripe.api_key = os.getenv("STRIPE_SECRET")
 @api_view(['POST'])
 def create_checkout_session(request):
 
-    DOMAIN = "http://localhost:3000"
+    DOMAIN = "http://localhost:3000/checkout"
     try: 
         checkout_session = stripe.checkout.Session.create(
             line_items = json.loads(request.body),
