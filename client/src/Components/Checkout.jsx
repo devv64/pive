@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { useCartContext } from './CartContext';
 
 const CartSection = ({ cart }) => {
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Cart</h2>
       {cart.map((item) => (
-        <div key={item.id} className="mb-2">
-          <p>{item.name}</p>
+        <div key={item.price_data.product_data.name} className="mb-2">
+          <p>{item.price_data.product_data.name}</p>
           <p>Quantity: {item.quantity}</p>
-          <p>Price: {item.price}</p>
+          <p>Price: ${item.price_data.unit_amount / 100}</p>
         </div>
       ))}
     </div>
@@ -18,11 +19,21 @@ const CartSection = ({ cart }) => {
 };
 
 const TotalSection = ({ cart }) => {
+  function roundTo(n, digits) {
+      if (digits === undefined) {
+          digits = 0;
+      }
+
+      var multiplicator = Math.pow(10, digits);
+      n = parseFloat((n * multiplicator).toFixed(11));
+      return Math.round(n) / multiplicator;
+  }
+
   const calculateSubTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return roundTo(cart.reduce((total, item) => total + item.price_data.unit_amount / 100 * item.quantity, 0),2);
   };
 
-  const deliveryFee = 5; // Example delivery fee
+  const deliveryFee = 4.99;
 
   return (
     <div className="mb-6">
@@ -82,17 +93,12 @@ const DeliveryInfoSection = () => {
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Delivery Info</h2>
-      {/* Add fields for estimated arrival time and any other relevant delivery information */}
     </div>
   );
 };
 
 const Checkout = () => {
-  const [cart, setCart] = useState([
-    { id: 1, name: 'Item 1', price: 10, quantity: 2 },
-    { id: 2, name: 'Item 2', price: 20, quantity: 1 },
-    // Add more items to the cart as needed
-  ]);
+  const { cartItems } = useCartContext();
 
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
@@ -106,11 +112,9 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // TODO: Implement Stripe Checkout integration here.
-    // For demonstration purposes, we'll just log the data for now.
     const checkoutData = {
-      cart,
+      cartItems,
       contactInfo,
-      // Add other relevant data for the order confirmation page
     };
     console.log(checkoutData);
     navigate('/order-confirmation');
@@ -125,8 +129,8 @@ const Checkout = () => {
       <main>
         <form onSubmit={handleSubmit} className="flex flex-wrap">
           <div className="w-full lg:w-1/2 lg:pr-8">
-            <CartSection cart={cart} />
-            <TotalSection cart={cart} />
+            <CartSection cart={cartItems} />
+            <TotalSection cart={cartItems} />
           </div>
           <div className="w-full lg:w-1/2 lg:pl-8">
             <ContactInfoSection contactInfo={contactInfo} setContactInfo={setContactInfo} />
@@ -143,7 +147,7 @@ const Checkout = () => {
         </form>
       </main>
       <footer className="mt-4 text-center">
-        <p className="text-sm">© 2023 My Company. All rights reserved.</p>
+        <p className="text-sm">© 2023 OrderPive. All rights reserved.</p>
       </footer>
     </div>
   );
