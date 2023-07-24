@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { useCartContext } from './CartContext';
@@ -9,6 +10,10 @@ const Cart = () => {
 
   const toggleCartVisibility = () => {
     setCartVisible(!isCartVisible);
+  };
+
+  const hideCart = () => {
+    setCartVisible(false);
   };
 
   const { cartItems } = useCartContext();
@@ -56,11 +61,16 @@ const Cart = () => {
           <ul>
             {cartItems.map((item) => (
               <li key={item.id} className="text-sm mb-2">
-                <span>{item.name}</span>
-                <span className="ml-2 text-gray-600">{item.price}</span>
+                <span>{item.price_data.product_data.name}</span>
+                <span className="ml-2 text-gray-600">{item.price_data.unit_amount / 100}</span>
               </li>
             ))}
           </ul>
+          <Link key="checkout" to='/checkout' onClick={hideCart}> {/* Add onClick event to hide the cart */}
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 focus:outline-none">
+              Checkout
+            </button>
+          </Link>
         </motion.div>
       )}
     </div>
