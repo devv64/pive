@@ -24,7 +24,7 @@ const Product = () => {
   }, [productId]);
 
   if (!selectedProduct) {
-    return <h2 className="text-2xl font-bold mt-40">Product not found</h2>;
+    return <h2 className="text-2xl font-bold mt-40">Loading</h2>;
   }
 
   const productSizes = selectedProduct.products;

@@ -1,12 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { getFeaturedProducts } from './api/products';
 import Navbar from './Components/Navbar';
 import MyCarousel from './Components/MyCarousel';
 import Product from './Components/Product';
 import Checkout from './Components/Checkout';
 import CartProvider from './Components/CartContext';
-import { getFeaturedProducts } from './api/products';
+import Landing from './Components/Landing';
+import OrderConfirmation from './Components/OrderConfirmation';
 
 function App() {
   const [data, setData] = useState([]);
@@ -18,14 +20,6 @@ function App() {
       });
   }, []);
 
-  const Home = () => {
-    return (
-      <div>
-        <MyCarousel title="Featured" products={data} />
-      </div>
-    );
-  };
-
   return (
     <CartProvider>
       <Router>
@@ -33,7 +27,14 @@ function App() {
           <Navbar />
           <div className="mb-40"></div>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={<Landing />}
+            />
+            <Route
+              path="/home"
+              element={<MyCarousel title="Featured" products={data} />}
+            />
             <Route
               path="/products"
               element={<MyCarousel title="Featured" products={data} />}
@@ -45,6 +46,10 @@ function App() {
             <Route
               path="/checkout"
               element={<Checkout />}
+            />
+            <Route
+              path="/order-confirmation"
+              element={<OrderConfirmation />}
             />
             <Route
               path="*"

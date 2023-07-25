@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useCartContext } from './CartContext';
+import axios from 'axios';
 
 const CartSection = ({ cart }) => {
   return (
@@ -108,16 +109,31 @@ const Checkout = () => {
   });
 
   const navigate = useNavigate();
+  const [checkoutUrl, setCheckoutUrl] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement Stripe Checkout integration here.
+  
+    // Prepare the data to send in the POST request
     const checkoutData = {
       cartItems,
       contactInfo,
     };
-    console.log(checkoutData);
-    navigate('/order-confirmation');
+  
+    try {
+      // Send the POST request to your backend view using axios
+      const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', cartItems);
+      const { id } = response.data; // Assuming your backend response returns the 'id' field
+  
+      // Redirect the user to the Stripe checkout page using the 'id' returned from the backend
+      if (id) {
+        window.location.href = `https://checkout.stripe.com/c/pay/${id}#fidkdWxOYHwnPyd1blpxYHZxWjA0S1JzX0RGTz1jc25cb2MzQVFVQV9VQTJLS05pMFw0R01WfXZHVVVVPH8wb3ZEZHRDfXRMbV1DMlxOdEFWU31HSlJGf0N0PXM0c3JcXDVyZnRzdWhDY302NTU3dHNAVz1rMycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl`;
+      } else {
+        console.error('Error: Unable to retrieve the Stripe checkout session URL.');
+      }
+    } catch (error) {
+      console.error('Error while processing the checkout.', error);
+    }
   };
 
   return (
@@ -135,8 +151,6 @@ const Checkout = () => {
           <div className="w-full lg:w-1/2 lg:pl-8">
             <ContactInfoSection contactInfo={contactInfo} setContactInfo={setContactInfo} />
             <DeliveryInfoSection />
-
-            {/* Stripe Checkout Button (Replace with actual Stripe integration) */}
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded mt-6 w-full"
