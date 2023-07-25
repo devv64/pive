@@ -3,6 +3,7 @@ from django.shortcuts import redirect, render
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from django.http import JsonResponse
 from .models import *
 import stripe
 import os
@@ -24,7 +25,7 @@ def create_checkout_session(request):
         print(str(e))
         return Response({"error":"stripe internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     print(checkout_session.url)
-    return redirect(checkout_session.url)
+    return JsonResponse({'id': checkout_session.id})
 
 #TODO: ADD AUTH VERIFICATION 
 @api_view(['POST'])

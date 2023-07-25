@@ -8,7 +8,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
-      <Link to="/" className="flex items-center w-full sm:w-auto">
+      <Link to="/home" className="flex items-center w-full sm:w-auto">
         <h1
             className={`text-white text-5xl ${isSmallScreen ? 'mx-auto' : 'ml-8'} py-4`}
           >
@@ -23,9 +23,6 @@ const Navbar = () => {
         />
         <MagnifyingGlassIcon className="absolute w-5 h-5 text-gray-400 left-3" />
         <Cart />
-        {/* <button className="ml-4 px-4 py-2 rounded-lg bg-blue-800 text-white">
-          Account
-        </button> */}
       </div>
     </nav>
   );
