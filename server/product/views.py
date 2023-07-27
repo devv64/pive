@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-
-
+from django.contrib.postgres.search import TrigramWordSimilarity, TrigramSimilarity
+from django.db.models import Q
 from .models import *
 # Create your views here.
 
@@ -107,3 +107,12 @@ def get_carousel_featured_drinks(request):
     drinks = Drink.objects.filter(featured=True)
     serializer = CarouselDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def get_autocomplete_results(request, query):
+    drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
+    
+    res = {'completions':[]}
+    for d in drinks:
+        res['completions'].append(d.name)
+    return Response(res)
