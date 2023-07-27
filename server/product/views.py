@@ -112,7 +112,10 @@ def get_carousel_featured_drinks(request):
 def get_autocomplete_results(request, query):
     drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
     
-    res = {'completions':[]}
+    res = []
     for d in drinks:
-        res['completions'].append(d.name)
+        res.append({
+            "id":d.id,
+            "name":d.name
+        })
     return Response(res)
