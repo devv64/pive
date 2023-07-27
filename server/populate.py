@@ -32,8 +32,8 @@ user2 = authenticate(username="dev", password="dev123")
 if not user2:
     user2 = User.objects.create_user("dev","dev@gmail.com","dev123")
 
-store1, _ = Store.objects.get_or_create(user=user1, name="arjun's alc", location = "54 sample st, NJ", available=True)
-store2, _ = Store.objects.get_or_create(user=user2, name="dev's alc", location = "1 sample st, NJ", available=True)
+store1, _ = Store.objects.get_or_create(user=user1, name="arjun's alc", location = "25-33 Romaine St, Fair Lawn , NJ", delivery_distance = 10, available=True)
+store2, _ = Store.objects.get_or_create(user=user2, name="dev's alc", location = "514 Steinway Road, Saddle Brook, NJ", delivery_distance = 10, available=True)
 
 
 with open('pive_sample_product_data.csv', 'r', encoding='utf-8-sig') as product_file:
