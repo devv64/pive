@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.postgres.search import TrigramWordSimilarity, TrigramSimilarity
+from django.contrib.postgres.search import TrigramWordSimilarity
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Q
 from .models import *
 # Create your views here.
@@ -110,10 +111,18 @@ def get_carousel_featured_drinks(request):
 
 @api_view(['GET'])
 def get_autocomplete_results(request, query):
+
+    vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+    search_query = SearchQuery(query)
+
+    pls_work = Drink.objects.annotate(rank=SearchRank(vector, search_query), similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")).filter(Q(rank__gte=0.3) | Q(similarity__gt=0.8)).order_by('-rank')
+
     drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
-    
+    #desc_drinks = Drink.objects.annotate(similarity_desc=TrigramWordSimilarity(query,"description"),).filter(similarity_desc__gt=0.8).order_by("-similarity_desc")
+    for d in pls_work:
+        print(d.name)
     res = []
-    for d in drinks:
+    for d in pls_work:
         res.append({
             "id":d.id,
             "name":d.name
