@@ -41,6 +41,7 @@ const Product = () => {
         <ProductDetails
           name={selectedProduct.name}
           price={selectedSize.carrying_stores[0].price}
+          quantity={selectedSize.carrying_stores[0].stock}
           selectedSize={selectedSize}
           productSizes={productSizes}
           onSizeChange={handleSizeChange}

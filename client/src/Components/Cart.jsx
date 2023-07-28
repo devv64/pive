@@ -66,7 +66,7 @@ const Cart = () => {
               </li>
             ))}
           </ul>
-          <Link key="checkout" to='/checkout' onClick={hideCart}> {/* Add onClick event to hide the cart */}
+          <Link key="checkout" to='/checkout' onClick={hideCart}>
             <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 focus:outline-none">
               Checkout
             </button>

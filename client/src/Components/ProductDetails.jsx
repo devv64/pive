@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartContext } from './CartContext';
 
-const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange }) => {
+const ProductDetails = ({ name, price, quantity, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
   const { addToCart } = useCartContext();
 
@@ -17,7 +17,7 @@ const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange 
           images: [selectedSize.image_url],
         },
       },
-      quantity: 1,
+      quantity: quantity,
     });
   };
 
@@ -53,9 +53,11 @@ const ProductDetails = ({ name, price, selectedSize, productSizes, onSizeChange 
             name="quantity"
             className="border rounded-lg px-4 py-2 w-24 focus:outline-none md:mr-2"
           >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+            {[...Array(quantity)].map((_, index) => (
+            <option key={index + 1} value={index + 1}>
+              {index + 1}
+            </option>
+            ))}
           </select>
           <button 
             className="bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 md:mt-0 md:ml-4 focus:outline-none"
