@@ -3,3 +3,5 @@ server/env/
 
 .env
 
+config.json
+
