@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import Cart from './Cart';
 import { Link } from 'react-router-dom';
