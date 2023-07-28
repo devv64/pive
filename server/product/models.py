@@ -26,6 +26,10 @@ class ProductStoreInfo(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     stock = models.IntegerField()
+    
+    class Meta:
+        ordering = ["price"]
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,12 +49,12 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ["id", "drink_name", "size", "image_url", "carrying_stores"]
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["carrying_stores"] = sorted(
-            representation["carrying_stores"], key=lambda x: x["price"], reverse=False
-        )
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation["carrying_stores"] = sorted(
+    #         representation["carrying_stores"], key=lambda x: x["price"], reverse=False
+    #     )
+    #     return representation
     
     def get_drink_name(self, instance):
         return instance.drink.name if instance.drink else None
@@ -73,7 +77,7 @@ class CarouselDrinkSerializer(serializers.ModelSerializer):
     def to_representation(self, instance): 
         rep = super().to_representation(instance)
         first_prod = Product.objects.filter(drink=instance).first()
-        first_prod_price = ProductStoreInfo.objects.filter(product=first_prod).order_by("-price").first().price
+        first_prod_price = ProductStoreInfo.objects.filter(product=first_prod)[0].price
         rep["product"] = {
             "size":first_prod.size,
             "image_url":first_prod.image_url,
