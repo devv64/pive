@@ -122,7 +122,7 @@ const Checkout = () => {
   
     try {
       // Send the POST request to your backend view using axios
-      const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', cartItems);
+      const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', cartItems.object);
       const { id } = response.data; // Assuming your backend response returns the 'id' field
   
       // Redirect the user to the Stripe checkout page using the 'id' returned from the backend

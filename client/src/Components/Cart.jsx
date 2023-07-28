@@ -16,7 +16,8 @@ const Cart = () => {
     setCartVisible(false);
   };
 
-  const { cartItems } = useCartContext();
+  const { cartItems, removeFromCart } = useCartContext();
+  // console.log(cartItems[0].price_data.product_data.name)
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -61,9 +62,15 @@ const Cart = () => {
           <ul>
             {cartItems.map((item) => (
               <li key={item.id} className="text-sm mb-2">
-                <span>{item.price_data.product_data.name}</span>
-                <span className="ml-2 text-gray-600">{item.price_data.unit_amount / 100}</span>
-                <span>{item.quantity}</span>
+                <span>{item.object.price_data.product_data.name}</span>
+                <span className="ml-2 text-gray-600">${item.object.price_data.unit_amount / 100}</span>
+                <span>{item.object.quantity}</span>
+                <button
+                  className="ml-2 text-red-600 text-sm focus:outline-none"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  Remove
+                </button>
               </li>
             ))}
           </ul>
