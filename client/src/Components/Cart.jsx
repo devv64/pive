@@ -63,6 +63,7 @@ const Cart = () => {
               <li key={item.id} className="text-sm mb-2">
                 <span>{item.price_data.product_data.name}</span>
                 <span className="ml-2 text-gray-600">{item.price_data.unit_amount / 100}</span>
+                <span>{item.quantity}</span>
               </li>
             ))}
           </ul>

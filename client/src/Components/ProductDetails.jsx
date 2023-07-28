@@ -17,7 +17,7 @@ const ProductDetails = ({ name, price, quantity, selectedSize, productSizes, onS
           images: [selectedSize.image_url],
         },
       },
-      quantity: quantity,
+      quantity: parseInt(document.getElementById('quantity').value),
     });
   };
 
