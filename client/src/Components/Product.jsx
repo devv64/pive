@@ -39,8 +39,11 @@ const Product = () => {
       <div className="flex flex-col md:flex-row items-center p-8 w-full max-w-6xl">
         <ProductImage src={selectedSize.image_url} alt={selectedProduct.name} />
         <ProductDetails
+          id={selectedSize.id}
           name={selectedProduct.name}
+          size={selectedSize.size}
           price={selectedSize.carrying_stores[0].price}
+          quantity={selectedSize.carrying_stores[0].stock}
           selectedSize={selectedSize}
           productSizes={productSizes}
           onSizeChange={handleSizeChange}

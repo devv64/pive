@@ -1,4 +1,3 @@
-// CartContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -18,13 +17,26 @@ const CartProvider = ({ children }) => {
   }, []);
 
   const addToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    console.log(item);
+    const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
+    console.log(existingItem, item.id);
+    if (existingItem) {
+      const updatedCartItems = cartItems.map((cartItem) =>
+        cartItem.id === item.id
+          ? { ...cartItem, object: { ...cartItem.object, quantity: cartItem.object.quantity + item.object.quantity } }
+          : cartItem
+      );
+      setCartItems(updatedCartItems);
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    } else {
+      const updatedCartItems = [...cartItems, item];
+      setCartItems(updatedCartItems);
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+    }
   };
 
-  const removeFromCart = (itemId) => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== itemId);
+  const removeFromCart = (id) => {
+    const updatedCartItems = cartItems.filter((item) => item.id !== id);
     setCartItems(updatedCartItems);
     localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
   };

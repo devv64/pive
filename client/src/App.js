@@ -2,13 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getFeaturedProducts } from './api/products';
-import Navbar from './Components/Navbar';
-import MyCarousel from './Components/MyCarousel';
-import Product from './Components/Product';
-import Checkout from './Components/Checkout';
-import CartProvider from './Components/CartContext';
-import Landing from './Components/Landing';
-import OrderConfirmation from './Components/OrderConfirmation';
+import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation } from './Components';
 
 function App() {
   const [data, setData] = useState([]);
