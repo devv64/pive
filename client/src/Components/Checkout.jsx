@@ -5,14 +5,15 @@ import { useCartContext } from './CartContext';
 import axios from 'axios';
 
 const CartSection = ({ cart }) => {
+  console.log(cart)
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Cart</h2>
       {cart.map((item) => (
-        <div key={item.price_data.product_data.name} className="mb-2">
-          <p>{item.price_data.product_data.name}</p>
-          <p>Quantity: {item.quantity}</p>
-          <p>Price: ${item.price_data.unit_amount / 100}</p>
+        <div key={item.object.price_data.product_data.name} className="mb-2">
+          <p>{item.object.price_data.product_data.name}</p>
+          <p>Quantity: {item.object.quantity}</p>
+          <p>Price: ${item.object.price_data.unit_amount / 100}</p>
         </div>
       ))}
     </div>
@@ -31,7 +32,7 @@ const TotalSection = ({ cart }) => {
   }
 
   const calculateSubTotal = () => {
-    return roundTo(cart.reduce((total, item) => total + item.price_data.unit_amount / 100 * item.quantity, 0),2);
+    return roundTo(cart.reduce((total, item) => total + item.object.price_data.unit_amount / 100 * item.object.quantity, 0),2);
   };
 
   const deliveryFee = 4.99;
@@ -40,8 +41,9 @@ const TotalSection = ({ cart }) => {
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Total</h2>
       <p>Subtotal: ${calculateSubTotal()}</p>
+      <p>Sales Tax: ${roundTo(calculateSubTotal()*.06625,2)}</p>
       <p>Delivery Fee: ${deliveryFee}</p>
-      <p className="text-2xl font-semibold">Total Amount: ${(calculateSubTotal() + deliveryFee).toFixed(2)}</p>
+      <p className="text-2xl font-semibold">Total Amount: ${(calculateSubTotal() * 1.06625 + deliveryFee).toFixed(2)}</p>
     </div>
   );
 };
@@ -115,14 +117,12 @@ const Checkout = () => {
     e.preventDefault();
   
     // Prepare the data to send in the POST request
-    const checkoutData = {
-      cartItems,
-      contactInfo,
-    };
-  
+    const checkoutData = cartItems.map((item) => item.object);
+
+    console.log(checkoutData)
     try {
       // Send the POST request to your backend view using axios
-      const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', cartItems.object);
+      const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', checkoutData);
       const { id } = response.data; // Assuming your backend response returns the 'id' field
   
       // Redirect the user to the Stripe checkout page using the 'id' returned from the backend
