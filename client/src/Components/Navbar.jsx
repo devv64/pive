@@ -4,7 +4,13 @@ import Cart from './Cart';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const isSmallScreen = window.innerWidth <= 660; //
+  const isSmallScreen = window.innerWidth <= 660;
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSearchInput(e.target.value);
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
@@ -20,6 +26,8 @@ const Navbar = () => {
           type="text"
           className="w-full sm:w-96 pl-10 pr-4 py-2 rounded-lg bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300"
           placeholder="Search beers, wine, liquors..."
+          value={searchInput}
+          onChange={handleChange}
         />
         <MagnifyingGlassIcon className="absolute w-5 h-5 text-gray-400 left-3" />
         <Cart />
