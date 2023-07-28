@@ -5,7 +5,7 @@ export async function getFeaturedProducts() {
         const res = await fetch(api);
         return await res.json();
     } catch (error) {
-        // console.log(error);
+        console.log(error);
     }
   }
 
@@ -17,6 +17,6 @@ export async function getProductbyId(productId) {
         return await res.json();
     }
     catch (error) {
-        // console.log(error);
+        console.log(error);
     }
   }

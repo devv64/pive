@@ -17,7 +17,6 @@ const Cart = () => {
   };
 
   const { cartItems, removeFromCart } = useCartContext();
-  // console.log(cartItems[0].price_data.product_data.name)
 
   useEffect(() => {
     const handleOutsideClick = (event) => {

@@ -41,6 +41,7 @@ const Product = () => {
         <ProductDetails
           id={selectedSize.id}
           name={selectedProduct.name}
+          size={selectedSize.size}
           price={selectedSize.carrying_stores[0].price}
           quantity={selectedSize.carrying_stores[0].stock}
           selectedSize={selectedSize}

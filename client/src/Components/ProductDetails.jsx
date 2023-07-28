@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartContext } from './CartContext';
 
-const ProductDetails = ({ id, name, price, quantity, selectedSize, productSizes, onSizeChange }) => {
+const ProductDetails = ({ id, name, size, price, quantity, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
   const { addToCart } = useCartContext();
 
@@ -14,9 +14,9 @@ const ProductDetails = ({ id, name, price, quantity, selectedSize, productSizes,
       object: {
         price_data: {
           currency: 'usd',
-          unit_amount: price * 100,
+          unit_amount: Math.trunc(price * 100),
           product_data: {
-            name,
+            name: name + size,
             images: [selectedSize.image_url],
           },
         },

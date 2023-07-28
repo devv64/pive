@@ -5,7 +5,6 @@ import { useCartContext } from './CartContext';
 import axios from 'axios';
 
 const CartSection = ({ cart }) => {
-  console.log(cart)
   return (
     <div className="mb-6">
       <h2 className="text-xl font-semibold">Cart</h2>
@@ -119,11 +118,10 @@ const Checkout = () => {
     // Prepare the data to send in the POST request
     const checkoutData = cartItems.map((item) => item.object);
 
-    console.log(checkoutData)
     try {
       // Send the POST request to your backend view using axios
       const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', checkoutData);
-      const { id } = response.data; // Assuming your backend response returns the 'id' field
+      const { id } = response.data;
   
       // Redirect the user to the Stripe checkout page using the 'id' returned from the backend
       if (id) {
