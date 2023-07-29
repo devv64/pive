@@ -145,7 +145,7 @@ def get_query_results(request, query, page_num):
     #queries top 100 closest matches to query
     drinks = Drink.objects.annotate(rank=SearchRank(vector, search_query), 
                                     similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")
-                                    ).order_by('-rank')[:100]
+                                    ).order_by('-rank', '-similarity')
     
     items_per_page = 20 #? make this a parameter?
     p = Paginator(drinks, items_per_page) #throw that shit into a paginator
