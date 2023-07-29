@@ -21,6 +21,7 @@ Category.objects.get_or_create(name="WhiteWine", parent=wine)
 Category.objects.get_or_create(name="Vodka", parent=liqour)
 Category.objects.get_or_create(name="Whiskey", parent=liqour)
 Category.objects.get_or_create(name="Gin", parent=liqour)
+Category.objects.get_or_create(name="Tequila", parent=liqour)
 Category.objects.get_or_create(name="Lager", parent=beer)
 Category.objects.get_or_create(name="HardSeltzer", parent=beer)
 

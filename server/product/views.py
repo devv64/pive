@@ -88,7 +88,9 @@ def get_by_id(request, id):
 @api_view(['GET'])
 def get_carousel_drinks_by_category(request, category):
     try:
-        categories = Category.objects.get(name=category).get_descendants()
+        categories = Category.objects.get(name=category).get_descendants(include_self=True)
+        for c in categories:
+            print(c.name)
         drinks = Drink.objects.filter(category__in=categories)
         serializer = LightDrinkSerializer(drinks, many=True)
         return Response(serializer.data)
@@ -155,8 +157,22 @@ def get_query_results(request, query, page_num):
                "has_next": page.has_next(), }
     resp['products'] = LightDrinkSerializer(page.object_list, many=True).data
 
-    print(resp)
     return Response(resp) #so what are we returning here, the list of
 
+@api_view(['GET'])
+def get_category_results(request, category, page_num):
+    categories = Category.objects.get(name=category).get_siblings(include_self=True)
+    drinks = Drink.objects.filter(category__in = categories).order_by('category')
+
+    items_per_page = 20 #? make this a parameter?
+    p = Paginator(drinks, items_per_page)
+    page = p.get_page(page_num)
+
+    resp = {"category": category,
+               "page_count": p.num_pages,
+               "has_prev": page.has_previous(),
+               "has_next": page.has_next(), }
+    resp['products'] = LightDrinkSerializer(page.object_list, many=True).data
+    return Response(resp)
 
 

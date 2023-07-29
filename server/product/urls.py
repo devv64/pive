@@ -9,6 +9,7 @@ urlpatterns = [
     path("category/<str:category>", views.get_carousel_drinks_by_category),
     path("search/<str:query>", views.get_autocomplete_results),
     path("search_results/<str:query>/<int:page_num>", views.get_query_results),
+    path("category_products/<str:category>/<int:page_num>", views.get_category_results),
 
     path("create", views.create),
 ]
