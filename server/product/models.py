@@ -67,7 +67,7 @@ class DrinkSerializer(serializers.ModelSerializer):
         fields = ["name", "description", "products"]
 
 
-class CarouselDrinkSerializer(serializers.ModelSerializer):
+class LightDrinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Drink
         fields = ["id", "name"]
