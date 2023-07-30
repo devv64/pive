@@ -1,6 +1,6 @@
 from django.db import models
 from rest_framework import serializers
-from product.models import Product, ProductSerializer
+from product.models import Product, ProductStoreInfo
 from stores.models import Store, StoreSerializer
 
 # Create your models here.
@@ -32,6 +32,12 @@ class OrderSerializer(serializers.ModelSerializer):
         order_items = validated_data.pop("order_items")
         order = Order.objects.create(**validated_data)
         for order_item_data in order_items:
+            update_stock(order_item_data['product_id'], order_item_data['store_id'], order_item_data['quantity'])
             OrderItem.objects.create(order=order, **order_item_data)
         return order
 
+#! uh check for out of stock??, but also payment is alr done at this point so idk
+def update_stock(product_id, store_id, quantity):
+    storeinfo = ProductStoreInfo.objects.get(store=store_id, product=product_id)
+    storeinfo.stock -= quantity
+    storeinfo.save()
