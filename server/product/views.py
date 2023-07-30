@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.contrib.postgres.search import TrigramWordSimilarity
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Q
@@ -87,9 +88,11 @@ def get_by_id(request, id):
 @api_view(['GET'])
 def get_carousel_drinks_by_category(request, category):
     try:
-        categories = Category.objects.get(name=category).get_descendants()
+        categories = Category.objects.get(name=category).get_descendants(include_self=True)
+        for c in categories:
+            print(c.name)
         drinks = Drink.objects.filter(category__in=categories)
-        serializer = CarouselDrinkSerializer(drinks, many=True)
+        serializer = LightDrinkSerializer(drinks, many=True)
         return Response(serializer.data)
     except ObjectDoesNotExist:
         return Response({"error":"Category not found"}, status=status.HTTP_404_NOT_FOUND)
@@ -106,7 +109,7 @@ def get_drink_by_id(request, id):
 @api_view(['GET'])
 def get_carousel_featured_drinks(request):
     drinks = Drink.objects.filter(featured=True)
-    serializer = CarouselDrinkSerializer(drinks, many=True)
+    serializer = LightDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -115,16 +118,61 @@ def get_autocomplete_results(request, query):
     vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
     search_query = SearchQuery(query)
 
-    pls_work = Drink.objects.annotate(rank=SearchRank(vector, search_query), similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")).filter(Q(rank__gte=0.3) | Q(similarity__gt=0.8)).order_by('-rank')
+    drinks = Drink.objects.annotate(rank=SearchRank(vector, search_query), 
+                                    similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")
+                                    ).filter(Q(rank__gte=0.3) | Q(similarity__gt=0.8)
+                                             ).order_by('-rank')
 
-    drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
-    #desc_drinks = Drink.objects.annotate(similarity_desc=TrigramWordSimilarity(query,"description"),).filter(similarity_desc__gt=0.8).order_by("-similarity_desc")
-    for d in pls_work:
-        print(d.name)
+    # drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
+    # desc_drinks = Drink.objects.annotate(similarity_desc=TrigramWordSimilarity(query,"description"),).filter(similarity_desc__gt=0.8).order_by("-similarity_desc")
+
+    # for d in drinks:
+    #     print(d.name)
     res = []
-    for d in pls_work:
+    for d in drinks:
         res.append({
             "id":d.id,
             "name":d.name
         })
     return Response(res)
+
+@api_view(['GET'])
+def get_query_results(request, query, page_num):
+
+    vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+    search_query = SearchQuery(query)
+
+    #queries top 100 closest matches to query
+    drinks = Drink.objects.annotate(rank=SearchRank(vector, search_query), 
+                                    similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")
+                                    ).order_by('-rank', '-similarity')
+    
+    items_per_page = 20 #? make this a parameter?
+    p = Paginator(drinks, items_per_page) #throw that shit into a paginator
+    page = p.get_page(page_num)
+
+    resp = {"query": query,
+               "page_count": p.num_pages,
+               "has_prev": page.has_previous(),
+               "has_next": page.has_next(), }
+    resp['products'] = LightDrinkSerializer(page.object_list, many=True).data
+
+    return Response(resp) #so what are we returning here, the list of
+
+@api_view(['GET'])
+def get_category_results(request, category, page_num):
+    categories = Category.objects.get(name=category).get_siblings(include_self=True)
+    drinks = Drink.objects.filter(category__in = categories).order_by('category')
+
+    items_per_page = 20 #? make this a parameter?
+    p = Paginator(drinks, items_per_page)
+    page = p.get_page(page_num)
+
+    resp = {"category": category,
+               "page_count": p.num_pages,
+               "has_prev": page.has_previous(),
+               "has_next": page.has_next(), }
+    resp['products'] = LightDrinkSerializer(page.object_list, many=True).data
+    return Response(resp)
+
+
