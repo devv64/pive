@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import Cart from './Cart';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Navbar = () => {
   const isSmallScreen = window.innerWidth <= 660;
   const [searchInput, setSearchInput] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
 
   const handleChange = (e) => {
     e.preventDefault();
+    console.log(e.target.value);
     setSearchInput(e.target.value);
   };
+
+  useEffect(() => {
+    if (searchInput.trim().length > 0) {
+      axios
+        .get(`http://127.0.0.1:8000/drinks/search/${encodeURIComponent(searchInput)}`)
+        .then((response) => {
+          console.log(response.data);
+          setSuggestions(response.data.results);
+        })
+        .catch((error) => {
+          console.error('Error fetching autocomplete results:', error);
+        });
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchInput]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
