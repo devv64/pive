@@ -29,6 +29,13 @@ const Navbar = () => {
     }
   }, [searchInput]);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && suggestions?.length > 0) {
+      const topSuggestion = suggestions[0];
+      window.location.href = `/products/${topSuggestion.id}`;
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
       <Link to="/home" className="flex items-center w-full sm:w-auto">
@@ -43,13 +50,14 @@ const Navbar = () => {
           placeholder="Search beers, wine, liquors..."
           value={searchInput}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         <MagnifyingGlassIcon className="absolute w-5 h-5 text-gray-400 left-3" />
         <Cart />
         {suggestions?.length > 0 && (
           <ul
             className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-lg"
-            style={{ top: '100%', minHeight: '20px' }}
+            style={{ top: '100%', minHeight: '20px', maxHeight: '140px', overflowY: 'scroll' }}
           >
             {suggestions.map((item) => (
               <li key={item.id}>
