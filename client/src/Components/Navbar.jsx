@@ -46,8 +46,8 @@ const Navbar = () => {
     setTimeout(() => setIsSearchFocused(false), 100);
   };
 
-  const handleSuggestionClick = (item) => {
-    selectedSuggestionRef.current = item;
+  const handleSuggestionClick = () => {
+    selectedSuggestionRef.current = null;
     setSearchInput('');
   };
 
@@ -80,12 +80,8 @@ const Navbar = () => {
               <li key={item.id}>
                 <Link
                   to={`/products/${item.id}`}
-                  className={`px-4 py-2 hover:bg-gray-100 block w-full ${
-                    selectedSuggestionRef.current && selectedSuggestionRef.current.id === item.id
-                      ? 'bg-gray-100'
-                      : ''
-                  }`}
-                  onClick={() => handleSuggestionClick(item)}
+                  className="px-4 py-2 hover:bg-gray-100 block w-full"
+                  onClick={() => handleSuggestionClick()}
                 >
                   {item.name}
                 </Link>
