@@ -53,7 +53,7 @@ const Navbar = () => {
           >
             {suggestions.map((item) => (
               <li key={item.id}>
-                <Link to={`/product/${item.id}`} className='px-4 py-2 hover:bg-gray-100 block w-full'>
+                <Link to={`/products/${item.id}`} className='px-4 py-2 hover:bg-gray-100 block w-full'>
                   {item.name}
                 </Link>
               </li>
