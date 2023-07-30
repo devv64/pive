@@ -138,7 +138,7 @@ const Checkout = () => {
     <div className="container mx-auto p-4">
       <header className="mb-4">
         <h1 className="text-2xl font-semibold">Checkout</h1>
-        <NavLink to="/" className="text-blue-500">Home</NavLink>
+        <NavLink to="/home" className="text-blue-500">Home</NavLink>
       </header>
       <main>
         <form onSubmit={handleSubmit} className="flex flex-wrap">

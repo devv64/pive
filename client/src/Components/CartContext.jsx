@@ -17,9 +17,7 @@ const CartProvider = ({ children }) => {
   }, []);
 
   const addToCart = (item) => {
-    console.log(item);
     const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
-    console.log(existingItem, item.id);
     if (existingItem) {
       const updatedCartItems = cartItems.map((cartItem) =>
         cartItem.id === item.id
