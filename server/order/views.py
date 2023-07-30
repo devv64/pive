@@ -31,6 +31,7 @@ def create_checkout_session(request):
 @api_view(['POST'])
 def create_order(request):
     data = json.loads(request.body)
+    print(data)
     serializer = OrderSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
