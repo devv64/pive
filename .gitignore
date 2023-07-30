@@ -3,3 +3,5 @@ server/env/
 
 .env
 
+client/src/Components/config.json
+
