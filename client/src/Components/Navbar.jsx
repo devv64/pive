@@ -11,7 +11,6 @@ const Navbar = () => {
 
   const handleChange = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     setSearchInput(e.target.value);
   };
 
@@ -20,8 +19,7 @@ const Navbar = () => {
       axios
         .get(`http://127.0.0.1:8000/drinks/search/${encodeURIComponent(searchInput)}`)
         .then((response) => {
-          console.log(response.data);
-          setSuggestions(response.data.results);
+          setSuggestions(response.data);
         })
         .catch((error) => {
           console.error('Error fetching autocomplete results:', error);
@@ -34,10 +32,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex flex-wrap items-center justify-between p-4 bg-blue-400 shadow-2xl">
       <Link to="/home" className="flex items-center w-full sm:w-auto">
-        <h1
-            className={`text-white text-5xl ${isSmallScreen ? 'mx-auto' : 'ml-8'} py-4`}
-          >
-            Pive
+        <h1 className={`text-white text-5xl ${isSmallScreen ? 'mx-auto' : 'ml-8'} py-4`}>
+          Pive
         </h1>
       </Link>
       <div className="relative flex items-center w-full sm:w-auto mt-4 sm:mt-0">
@@ -50,9 +46,21 @@ const Navbar = () => {
         />
         <MagnifyingGlassIcon className="absolute w-5 h-5 text-gray-400 left-3" />
         <Cart />
+        {suggestions?.length > 0 && (
+          <ul
+            className="absolute z-10 w-full mt-2 bg-white rounded-lg shadow-lg"
+            style={{ top: '100%', minHeight: '20px' }}
+          >
+            {suggestions.map((item) => (
+              <li key={item.id} className="px-4 py-2 hover:bg-gray-100">
+                <Link to={`/product/${item.id}`}>{item.name}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </nav>
-  );
+  );    
 };
 
 export default Navbar;
