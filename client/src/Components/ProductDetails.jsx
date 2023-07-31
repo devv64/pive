@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartContext } from './CartContext';
+import CartNotification from './CartNotification';
 
 const ProductDetails = ({ id, name, size, price, quantity, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
   const { addToCart } = useCartContext();
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const [isNotificationSuccess, setIsNotificationSuccess] = useState(true);
 
   const handleAddToCart = () => {
     addToCart({
@@ -22,6 +25,19 @@ const ProductDetails = ({ id, name, size, price, quantity, selectedSize, product
         },
         quantity: parseInt(document.getElementById('quantity').value),
     }});
+    try {
+      const isSuccess = true;
+
+      setIsNotificationVisible(true);
+      setIsNotificationSuccess(isSuccess);
+
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 3000);
+    } catch (error) {
+      setIsNotificationVisible(true);
+      setIsNotificationSuccess(false);
+    }
   };
 
   return (
@@ -68,6 +84,9 @@ const ProductDetails = ({ id, name, size, price, quantity, selectedSize, product
             Add to Cart
           </button>
         </div>
+        {isNotificationVisible && (
+          <CartNotification isSuccess={isNotificationSuccess} onClose={() => setIsNotificationVisible(false)} />
+        )}
       </div>
     </div>
   );
