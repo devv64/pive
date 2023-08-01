@@ -31,11 +31,16 @@ def create_checkout_session(request):
 @api_view(['POST'])
 def create_order(request):
     data = json.loads(request.body)
-    print(data)
     serializer = OrderSerializer(data=data)
-    if serializer.is_valid():
+    # if serializer.is_valid():
+    #     serializer.save()
+    # else:
+    #     print(serializer.errors)
+
+    try:
+        serializer.is_valid(raise_exception=True)
         serializer.save()
-    else:
-        print(serializer.errors)
+    except serializers.ValidationError as e:
+        return Response(e.detail, status=status.HTTP_418_IM_A_TEAPOT)
     return Response(status=status.HTTP_201_CREATED)
     
