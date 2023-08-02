@@ -8,8 +8,23 @@ from django.core.exceptions import ObjectDoesNotExist
 class Order(models.Model):
     address = models.CharField(max_length=100)
     contact = models.CharField(max_length=50)
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, default="Processing")
     ordered_at = models.DateTimeField()
+
+    def confirm_payed_order(self):
+        self.status = "Payed"
+        self.save()
+        items = self.order_items.all()
+        for item in items:
+            storeinfo = ProductStoreInfo.objects.get(store=item.store_id, product=item.product_id)
+            print(storeinfo.stock)
+            storeinfo.stock -= item.quantity
+            storeinfo.save()
+            print(storeinfo.stock)
+
+    def set_expired(self):
+        self.status="Expired"
+        self.save()
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="order_items", on_delete=models.CASCADE)
@@ -17,11 +32,6 @@ class OrderItem(models.Model):
     store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
-    def save(self, *args, **kwargs):
-        storeinfo = ProductStoreInfo.objects.get(store=self.store_id, product=self.product_id)
-        storeinfo.stock -= self.quantity
-        storeinfo.save()
-        super(OrderItem, self).save(*args, **kwargs)
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,7 +74,7 @@ class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True) 
     class Meta:
         model = Order
-        fields = ["order_items", "address", "contact", "status", "ordered_at"]
+        fields = ["order_items", "address", "contact", "ordered_at"]
 
     def create(self, validated_data):
         try:
