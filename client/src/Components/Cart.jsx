@@ -16,7 +16,7 @@ const Cart = () => {
     setCartVisible(false);
   };
 
-  const { cartItems, removeFromCart } = useCartContext();
+  const { cartItems, removeFromCart, updateQuantity } = useCartContext();
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -65,7 +65,7 @@ const Cart = () => {
                   id={`quantity-${item.id}`}
                   className="border rounded-lg px-2 py-1 text-sm focus:outline-none"
                   defaultValue={item.object.quantity}
-                  onChange={(e) => console.log(e.target.value)}
+                  onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
                 >
                   {Array.from({ length: item.store_stock }, (_, i) => i + 1).map((num) => (
                     <option key={num} value={num}>{num}</option>
