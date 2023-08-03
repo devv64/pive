@@ -1,3 +1,5 @@
+from datetime import datetime
+import time
 from django.db import models
 from rest_framework import serializers
 from product.models import Product, ProductStoreInfo
@@ -6,13 +8,16 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 class Order(models.Model):
+    name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    contact = models.CharField(max_length=50)
+    phone = models.CharField(max_length=50)
+    email = models.CharField(max_length=100)
     status = models.CharField(max_length=10, default="Processing")
-    ordered_at = models.DateTimeField()
+    ordered_at = models.DateTimeField(null=True)
 
     def confirm_payed_order(self):
         self.status = "Payed"
+        self.ordered_at = datetime.now()
         self.save()
         items = self.order_items.all()
         for item in items:
@@ -74,7 +79,7 @@ class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True) 
     class Meta:
         model = Order
-        fields = ["order_items", "address", "contact", "ordered_at"]
+        fields = ["order_items", "name", "address", "email", "phone"]
 
     def create(self, validated_data):
         try:
