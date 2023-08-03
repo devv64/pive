@@ -14,12 +14,13 @@ const ProductDetails = ({ id, name, size, price, quantity, selectedSize, product
     addToCart({
       id: id,
       store_id: selectedSize.carrying_stores[0].store.id,
+      store_stock: selectedSize.carrying_stores[0].stock,
       object: {
         price_data: {
           currency: 'usd',
           unit_amount: Math.trunc(price * 100),
           product_data: {
-            name: name + size,
+            name: name + ' ' + size,
             images: [selectedSize.image_url],
           },
         },

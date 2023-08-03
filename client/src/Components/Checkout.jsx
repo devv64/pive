@@ -116,8 +116,23 @@ const Checkout = () => {
     e.preventDefault();
   
     // Prepare the data to send in the POST request
-    const checkoutData = cartItems.map((item) => item.object);
+    const order_items = cartItems.map((item) => {
+      return {
+        product_id: item.id,
+        store_id: item.store_id,
+        quantity: item.object.quantity
+      }
+    })
 
+    const checkoutData = {
+      // address: 
+      name: contactInfo.firstName + ' ' + contactInfo.lastName,
+      phone_number: contactInfo.phoneNumber,
+      email: contactInfo.email,
+      order_items: order_items,
+    }
+
+    console.log(checkoutData)
     try {
       // Send the POST request to your backend view using axios
       const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', checkoutData);

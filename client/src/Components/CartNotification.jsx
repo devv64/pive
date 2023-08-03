@@ -7,8 +7,8 @@ const CartNotification = ({ isSuccess, onClose }) => {
         isSuccess ? 'bg-green-400' : 'bg-red-400'
       }`}
     >
-      {isSuccess ? 'Successfully added item to cart!' : 'Could not add item to cart.'}
-      <button className="ml-2 text-sm font-semibold text-white" onClick={onClose}>
+      {isSuccess ? 'Added to cart!' : 'Could not add item to cart.'}
+      <button className="ml-2 text-sm font-semibold text-red-400" onClick={onClose}>
         Close
       </button>
     </div>
