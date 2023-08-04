@@ -127,7 +127,7 @@ const Checkout = () => {
     const checkoutData = {
       address: '123 Main Street',
       name: contactInfo.firstName + ' ' + contactInfo.lastName,
-      phone_number: contactInfo.phoneNumber,
+      phone: contactInfo.phoneNumber,
       email: contactInfo.email,
       order_items: order_items,
     }
