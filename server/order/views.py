@@ -96,6 +96,7 @@ def stripe_payment_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400)
+    print(event)
     order = Order.objects.get(pk=event['data']['object']['metadata']['order_id'])
     
     if event['type'] == "checkout.session.completed":
