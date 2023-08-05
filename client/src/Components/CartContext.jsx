@@ -8,16 +8,23 @@ export const useCartContext = () => {
 
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [orderData, setOrderData] = useState({});
 
   useEffect(() => {
     const savedCartItems = localStorage.getItem('cartItems');
     if (savedCartItems) {
       setCartItems(JSON.parse(savedCartItems));
     }
+
+    const savedOrderData = localStorage.getItem('orderData');
+    if (savedOrderData) {
+      setOrderData(JSON.parse(savedOrderData));
+    }
   }, []);
 
   const addToCart = (item) => {
     const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
+    console.log('existingItem: ', existingItem);
     if (existingItem) {
       const updatedCartItems = cartItems.map((cartItem) =>
         cartItem.id === item.id
@@ -53,6 +60,17 @@ const CartProvider = ({ children }) => {
     }));
   };
 
+  const addToOrderData = (data) => {
+    console.log('data: ', data)
+    setOrderData(data);
+    localStorage.setItem('orderData', JSON.stringify(data));
+  };
+
+  const clearOrderData = () => {
+    setOrderData({});
+    localStorage.removeItem('orderData');
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -60,7 +78,9 @@ const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         clearCart,
-        updateQuantity
+        updateQuantity,
+        orderData,
+        addToOrderData,
       }}
     >
       {children}

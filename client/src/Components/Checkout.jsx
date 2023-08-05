@@ -100,7 +100,7 @@ const DeliveryInfoSection = () => {
 };
 
 const Checkout = () => {
-  const { cartItems } = useCartContext();
+  const { cartItems, addToOrderData } = useCartContext();
 
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
@@ -132,7 +132,8 @@ const Checkout = () => {
       order_items: order_items,
     }
 
-    console.log(checkoutData)
+    addToOrderData(checkoutData)
+
     try {
       // Send the POST request to your backend view using axios
       const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', checkoutData);
