@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCartContext } from './CartContext';
+import CartNotification from './CartNotification';
 
 const ProductDetails = ({ id, name, size, price, quantity, selectedSize, productSizes, onSizeChange }) => {
   const location = useLocation();
   const { addToCart } = useCartContext();
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+  const [isNotificationSuccess, setIsNotificationSuccess] = useState(true);
 
   const handleAddToCart = () => {
     addToCart({
       id: id,
       store_id: selectedSize.carrying_stores[0].store.id,
+      store_stock: selectedSize.carrying_stores[0].stock,
       object: {
         price_data: {
           currency: 'usd',
           unit_amount: Math.trunc(price * 100),
           product_data: {
-            name: name + size,
+            name: name + ' ' + size,
             images: [selectedSize.image_url],
           },
         },
         quantity: parseInt(document.getElementById('quantity').value),
     }});
+    try {
+      const isSuccess = true;
+
+      setIsNotificationVisible(true);
+      setIsNotificationSuccess(isSuccess);
+
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 3000);
+    } catch (error) {
+      setIsNotificationVisible(true);
+      setIsNotificationSuccess(false);
+    }
   };
 
   return (
@@ -68,6 +85,9 @@ const ProductDetails = ({ id, name, size, price, quantity, selectedSize, product
             Add to Cart
           </button>
         </div>
+        {isNotificationVisible && (
+          <CartNotification isSuccess={isNotificationSuccess} onClose={() => setIsNotificationVisible(false)} />
+        )}
       </div>
     </div>
   );
