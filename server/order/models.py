@@ -45,7 +45,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         '''
-        #! product id gotta be legit
+        product id gotta be legit
         #! check again that the store can deliver to that location
         store must have stock
         '''

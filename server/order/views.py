@@ -38,7 +38,7 @@ def create_checkout_session(request):
         checkout_session = stripe.checkout.Session.create(
             line_items = line_items_data,
             mode='payment',
-            success_url= DOMAIN + "/order-confirmation?success",
+            success_url= DOMAIN + "/order-confirmation?success=true&order_id=" + str(order.id),
             cancel_url=DOMAIN + "/checkout?canceled=true",
             expires_at = (int(time.time()) + 1800),
             metadata = {"order_id":order.id}
