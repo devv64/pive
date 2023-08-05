@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect }from 'react';
 import { useLocation } from 'react-router-dom';
+import { useCartContext } from './CartContext';
 
 const OrderConfirmation = () => {
-  const location = useLocation();
-  const { checkoutData } = location.state;
+  const { orderData } = useCartContext();
 
-  // Extract cart items and contact information from checkoutData
-  const { cartItems, contactInfo } = checkoutData;
-
+  useEffect(() => {
+    console.log('orderData: ', orderData);
+  }, []);
+  
   return (
     <div className="container mx-auto p-4">
       <header className="mb-4">
@@ -15,25 +16,23 @@ const OrderConfirmation = () => {
       </header>
       <main>
         <p>Your order has been successfully placed.</p>
-
         <div>
-          <h2 className="text-xl font-semibold">Order Details:</h2>
-          {cartItems.map((item, index) => (
-            <div key={index} className="mb-2">
-              <p>{item.price_data.product_data.name}</p>
-              <p>Quantity: {item.quantity}</p>
-              <p>Price: ${item.price_data.unit_amount / 100}</p>
-              <hr />
-            </div>
-          ))}
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold">Contact Information:</h2>
-          <p>First Name: {contactInfo.firstName}</p>
-          <p>Last Name: {contactInfo.lastName}</p>
-          <p>Phone Number: {contactInfo.phoneNumber}</p>
-          <p>Email: {contactInfo.email}</p>
+          {orderData && orderData.order_items ? (
+            <>
+              <h2 className="text-xl font-semibold">Order Details:</h2>
+              {orderData.order_items.map((item, index) => (
+                <div key={index} className="mb-2">
+                  <p>{item.product_id}</p>
+                  <p>{item.store_id}</p>
+                  <p>{item.quantity}</p>
+                </div>
+              ))}
+              <h2 className="text-xl font-semibold">Contact Information:</h2>
+              <p>Name: {orderData.name}</p>
+              <p>Phone Number: {orderData.phone}</p>
+              <p>Email: {orderData.email}</p>
+            </>
+          ) : null}
         </div>
       </main>
       <footer className="mt-4 text-center">

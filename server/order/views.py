@@ -13,7 +13,7 @@ import os
 stripe.api_key = os.getenv("STRIPE_SECRET")
 
 #! throw this shit in an env variable
-endpoint_secret = "whsec_efb18c74bfc2136673ffa3c1e532edc88b2bb8f3981cfafc47aaada10d669217"
+endpoint_secret = os.getenv("ENDPOINT_SECRET")
 # Create your views here.
 @api_view(['POST'])
 def create_checkout_session(request):
@@ -33,13 +33,13 @@ def create_checkout_session(request):
     line_items_data = reformat_for_stripe(data)
 
 
-    DOMAIN = "http://localhost:3000/checkout"
+    DOMAIN = "http://localhost:3000"
     try: 
         checkout_session = stripe.checkout.Session.create(
             line_items = line_items_data,
             mode='payment',
-            success_url= DOMAIN + "?success=true&order_id=" + str(order.id),
-            cancel_url=DOMAIN + "?canceled=true",
+            success_url= DOMAIN + "/order-confirmation?success=true&order_id=" + str(order.id),
+            cancel_url=DOMAIN + "/checkout?canceled=true",
             expires_at = (int(time.time()) + 1800),
             metadata = {"order_id":order.id}
         )

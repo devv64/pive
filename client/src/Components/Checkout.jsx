@@ -100,7 +100,7 @@ const DeliveryInfoSection = () => {
 };
 
 const Checkout = () => {
-  const { cartItems } = useCartContext();
+  const { cartItems, addToOrderData } = useCartContext();
 
   const [contactInfo, setContactInfo] = useState({
     firstName: '',
@@ -116,7 +116,23 @@ const Checkout = () => {
     e.preventDefault();
   
     // Prepare the data to send in the POST request
-    const checkoutData = cartItems.map((item) => item.object);
+    const order_items = cartItems.map((item) => {
+      return {
+        product_id: item.id,
+        store_id: item.store_id,
+        quantity: item.object.quantity
+      }
+    })
+
+    const checkoutData = {
+      address: '123 Main Street',
+      name: contactInfo.firstName + ' ' + contactInfo.lastName,
+      phone: contactInfo.phoneNumber,
+      email: contactInfo.email,
+      order_items: order_items,
+    }
+
+    addToOrderData(checkoutData)
 
     try {
       // Send the POST request to your backend view using axios

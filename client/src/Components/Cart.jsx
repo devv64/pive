@@ -16,7 +16,7 @@ const Cart = () => {
     setCartVisible(false);
   };
 
-  const { cartItems, removeFromCart } = useCartContext();
+  const { cartItems, removeFromCart, updateQuantity } = useCartContext();
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -58,17 +58,26 @@ const Cart = () => {
           className="absolute right-0 mt-2 p-4 bg-white shadow-lg rounded-lg z-10"
         >
           <h3 className="text-lg font-semibold mb-4">Your Cart</h3>
-          <ul>
+          <ul className="list-none p-0 m-0">
             {cartItems.map((item) => (
-              <li key={item.id} className="text-sm mb-2">
-                <span>{item.object.price_data.product_data.name}</span>
-                <span className="ml-2 text-gray-600">${item.object.price_data.unit_amount / 100}</span>
-                <span>{item.object.quantity}</span>
+              <li key={item.id} className="flex items-center justify-between border-b border-gray-300 py-2">
+                <select
+                  id={`quantity-${item.id}`}
+                  className="border rounded-lg px-2 py-1 text-sm focus:outline-none"
+                  defaultValue={item.object.quantity}
+                  onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                >
+                  {Array.from({ length: item.store_stock }, (_, i) => i + 1).map((num) => (
+                    <option key={num} value={num}>{num}</option>
+                  ))}
+                </select>
+                <span className="text-sm font-bold">{item.object.price_data.product_data.name}</span>
+                <span className="text-sm text-gray-600">${item.object.price_data.unit_amount / 100}</span>
                 <button
-                  className="ml-2 text-red-600 text-sm focus:outline-none"
+                  className="text-sm text-red-600 focus:outline-none"
                   onClick={() => removeFromCart(item.id)}
                 >
-                  Remove
+                  <span className="text-lg font-bold">×</span>
                 </button>
               </li>
             ))}
