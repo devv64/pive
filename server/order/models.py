@@ -5,10 +5,11 @@ from rest_framework import serializers
 from product.models import Product, ProductStoreInfo
 from stores.models import Store, StoreSerializer
 from django.core.exceptions import ObjectDoesNotExist
-
+import uuid
 # Create your models here.
 class Order(models.Model):
     name = models.CharField(max_length=100)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
