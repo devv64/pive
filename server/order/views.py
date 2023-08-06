@@ -38,7 +38,7 @@ def create_checkout_session(request):
         checkout_session = stripe.checkout.Session.create(
             line_items = line_items_data,
             mode='payment',
-            success_url= DOMAIN + "/order-confirmation?success=true&order_id=" + str(order.id),
+            success_url= DOMAIN + "/order-confirmation?success=true&order_id=" + str(order.uuid),
             cancel_url=DOMAIN + "/checkout?canceled=true",
             expires_at = (int(time.time()) + 1800),
             metadata = {"order_id":order.id}
@@ -106,3 +106,7 @@ def stripe_payment_webhook(request):
 
     return HttpResponse(status=200)
     
+@api_view(['GET'])
+def get_order_by_uuid(request, uuid):
+    order = Order.objects.get(uuid=uuid)
+    return Response(OrderSerializer(instance=order).data)
