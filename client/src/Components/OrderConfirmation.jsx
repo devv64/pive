@@ -1,13 +1,33 @@
-import React, { useEffect }from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect }from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useCartContext } from './CartContext';
 
 const OrderConfirmation = () => {
-  const { orderData } = useCartContext();
+  // const { orderData } = useCartContext();
+  const order_id = new URLSearchParams(useLocation().search).get('order_id');
+  console.log('order_id: ', order_id)
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
-    console.log('orderData: ', orderData);
+    const fetchOrderData = async () => {
+      const data = await get_order(order_id);
+      setOrderData(data);
+    };
+    fetchOrderData();
   }, []);
+
+  const get_order = async (order_id) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/order/get_order/${order_id}`)
+      const data = await response.json();
+      console.log('data: ', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching order:', error);
+    }
+  }
+
+  console.log(orderData)
   
   return (
     <div className="container mx-auto p-4">
@@ -25,6 +45,10 @@ const OrderConfirmation = () => {
                   <p>{item.product_id}</p>
                   <p>{item.store_id}</p>
                   <p>{item.quantity}</p>
+                  <p>{item.name}</p>
+                  <p>{item.price}</p>
+                  <p>{item.size}</p>
+                  <p>{item.image}</p>
                 </div>
               ))}
               <h2 className="text-xl font-semibold">Contact Information:</h2>
