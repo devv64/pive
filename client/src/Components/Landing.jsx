@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
+import { useCartContext } from './CartContext';
+
 const { MAPS_API_KEY } = require('./config');
 
+const libraries = ['places'];
 function Landing() {
-  const libraries = ['places'];
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: MAPS_API_KEY,
     libraries,
   });
 
 
-  const [stores, setStores] = useState([]);
+  const { stores, addStores } = useCartContext();
 
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
@@ -31,13 +33,13 @@ function Landing() {
   
       const data = await response.json();
       console.log('data: ', data);
-      setStores(data);
+
+      addStores(data.all);
   
       if (data.all && data.all.length === 0) {
         window.location.href = '/locations';
       } else {
-        const encodedStores = encodeURIComponent(JSON.stringify(stores));
-        window.location.href = `/home?stores=${encodedStores}`;
+        window.location.href = `/home`;
       }
       
     } catch (error) {
