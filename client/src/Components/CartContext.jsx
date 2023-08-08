@@ -9,6 +9,7 @@ export const useCartContext = () => {
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [orderData, setOrderData] = useState({});
+  const [stores, setStores] = useState([]);
 
   useEffect(() => {
     const savedCartItems = localStorage.getItem('cartItems');
@@ -19,6 +20,11 @@ const CartProvider = ({ children }) => {
     const savedOrderData = localStorage.getItem('orderData');
     if (savedOrderData) {
       setOrderData(JSON.parse(savedOrderData));
+    }
+
+    const savedStores = localStorage.getItem('stores');
+    if (savedStores) {
+      setStores(JSON.parse(savedStores));
     }
   }, []);
 
@@ -71,6 +77,16 @@ const CartProvider = ({ children }) => {
     localStorage.removeItem('orderData');
   };
 
+  const addStores = (stores) => {
+    setStores(stores);
+    localStorage.setItem('stores', JSON.stringify(stores));
+  };
+
+  const clearStores = () => {
+    setStores([]);
+    localStorage.removeItem('stores');
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -81,6 +97,10 @@ const CartProvider = ({ children }) => {
         updateQuantity,
         orderData,
         addToOrderData,
+        clearOrderData,
+        stores,
+        addStores,
+        clearStores,
       }}
     >
       {children}

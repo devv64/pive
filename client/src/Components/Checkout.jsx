@@ -120,7 +120,10 @@ const Checkout = () => {
       return {
         product_id: item.id,
         store_id: item.store_id,
-        quantity: item.object.quantity
+        quantity: item.object.quantity,
+        name: item.object.price_data.product_data.name,
+        price: item.object.price_data.unit_amount / 100,
+        image: item.object.price_data.product_data.images[0],
       }
     })
 

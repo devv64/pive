@@ -6,7 +6,7 @@ import googlemaps
 from rest_framework.response import Response
 
 # Create your views here.
-@api_view(['GET'])
+@api_view(['POST'])
 def getAvailableStores(request):
 
     gmaps = googlemaps.Client(key=os.getenv('MAPS_SECRET'))
@@ -17,7 +17,7 @@ def getAvailableStores(request):
     }
     for store in Store.objects.all():
         dest = store.location
-        dist = float(gmaps.distance_matrix(origins=source,destinations=dest,units="imperial")['rows'][0]['elements'][0]['distance']['text'][:-3])
+        dist = float(gmaps.distance_matrix(origins=source,destinations=dest,units="imperial")['rows'][0]['elements'][0]['distance']['text'][:-3].replace(',',''))
         if dist <= store.delivery_distance:
             resp['all'].append({"id":store.id, "name":store.name, "distance":dist})
             if not resp['primary'] or dist < resp['primary']['distance'] :

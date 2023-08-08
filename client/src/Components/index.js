@@ -6,3 +6,4 @@ export { default as MyCarousel } from './MyCarousel';
 export { default as Navbar } from './Navbar';
 export { default as OrderConfirmation } from './OrderConfirmation';
 export { default as Product } from './Product';
+export { default as Locations } from './Locations';
