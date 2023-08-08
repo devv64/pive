@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'order',
     'product',
     'stores',
+    'manager',
     'corsheaders',
     'django.contrib.postgres'
 ]
