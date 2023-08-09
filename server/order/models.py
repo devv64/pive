@@ -10,6 +10,7 @@ import uuid
 class Order(models.Model):
     name = models.CharField(max_length=100)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+    store = models.ForeignKey(Store, models.CASCADE)
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=50)
     email = models.CharField(max_length=100)
@@ -22,7 +23,7 @@ class Order(models.Model):
         self.save()
         items = self.order_items.all()
         for item in items:
-            storeinfo = ProductStoreInfo.objects.get(store=item.store_id, product=item.product_id)
+            storeinfo = ProductStoreInfo.objects.get(store=self.store, product=item.product_id)
             print(storeinfo.stock)
             storeinfo.stock -= item.quantity
             storeinfo.save()
@@ -35,52 +36,23 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="order_items", on_delete=models.CASCADE)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE) 
-    store_id = models.ForeignKey(Store, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    image = models.CharField(max_length=300)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
     quantity = models.IntegerField()
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ["product_id", "store_id", "quantity"]
-
-    def validate(self, data):
-        '''
-        product id gotta be legit
-        #! check again that the store can deliver to that location
-        store must have stock
-        '''
-        print(data)
-        # try:
-        #     Product.objects.get(pk=data['product_id'])
-        # except ObjectDoesNotExist:
-        #     raise serializers.ValidationError({"product_id":"invalid product id"})
-        
-        # try:
-        #     Store.objects.get(pk=data['store_id'])
-        # except ObjectDoesNotExist:
-        #     raise serializers.ValidationError({"store_id":"invalid store id"})
-        
-        try:
-            storeinfo = ProductStoreInfo.objects.get(store=data['store_id'], product=data['product_id'])
-            print(storeinfo.stock)
-            if data['quantity'] > storeinfo.stock:
-                raise serializers.ValidationError(
-                    {
-                        "quantity":"Not enough stock", 
-                        "product_id": data['product_id'],
-                        "store_id": data['store_id'],
-                        "available_stock":storeinfo.stock
-                     })
-        except ObjectDoesNotExist:
-            raise serializers.ValidationError({"Store does not have product"})
-        return data
+        fields = ["product_id", "name", "image","price", "quantity"]
 
 class OrderSerializer(serializers.ModelSerializer):
-    order_items = OrderItemSerializer(many=True) 
+    order_items = OrderItemSerializer(many=True)
+    store = serializers.PrimaryKeyRelatedField(queryset=Store.objects.all()) 
     class Meta:
         model = Order
-        fields = ["order_items", "name", "address", "email", "phone"]
+        fields = ["order_items", "store","name", "address", "email", "phone"]
 
     def create(self, validated_data):
         try:
@@ -91,3 +63,25 @@ class OrderSerializer(serializers.ModelSerializer):
         except serializers.ValidationError as e:
             raise e
         return order
+    
+    def validate(self, data):
+        try:
+            for order_item in data['order_items']:
+                storeinfo = ProductStoreInfo.objects.get(store=data['store'], product=order_item['product_id'])
+                if order_item['quantity'] > storeinfo.stock:
+                    raise serializers.ValidationError(
+                        {
+                            "quantity":"Not enough stock", 
+                            "product_id": order_item['product_id'],
+                            "store_id": data['store'],
+                            "available_stock":storeinfo.stock
+                        })
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError({"Store does not have product"})
+        return data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["store"] = StoreSerializer(instance=Store.objects.get(pk=representation["store"])).data
+        return representation
+                

@@ -52,16 +52,13 @@ def create_checkout_session(request):
 def reformat_for_stripe(data):
     line_item_data = []
     for item in data['order_items']:
-        product = Product.objects.get(pk=item['product_id'])
-        store = Store.objects.get(pk=item['store_id'])
-        price = int(ProductStoreInfo.objects.get(store=store, product=product).price * 100)
         line_item_data.append({
             "price_data": {
                 "currency": "usd",
-                "unit_amount": price,
+                "unit_amount": int(item['price'] * 100),
                 "product_data": {
-                    "name": product.drink.name + " " + product.size,
-                    "images": [product.image_url]
+                    "name": item['name'],
+                    "images": [item['image']]
                 }
             },
             "quantity": item['quantity']
@@ -77,7 +74,7 @@ def create_order(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
     except serializers.ValidationError as e:
-        return Response(e.detail, status=status.HTTP_418_IM_A_TEAPOT)
+        return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_201_CREATED)
 
 @csrf_exempt
