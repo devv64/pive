@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 import { useCartContext } from './CartContext';
-import { add } from '@tensorflow/tfjs';
 
 const { MAPS_API_KEY } = require('./config');
 

@@ -1,11 +1,18 @@
 import React from 'react';
 import { useCartContext } from './CartContext';
+import { useLoadScript, Autocomplete } from '@react-google-maps/api';
 
+const { MAPS_API_KEY } = require('./config');
+
+const libraries = ['places'];
 const AddressInfo = () => {
-  const {
-    address,
-    addAddress,
-  } = useCartContext();
+
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: MAPS_API_KEY,
+    libraries,
+  });
+
+  const { address,addAddress } = useCartContext();
 
   const handleAddressChange = (event) => {
     const newAddress = event.target.value;
