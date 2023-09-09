@@ -7,12 +7,16 @@ from mptt.models import MPTTModel, TreeForeignKey
 class Category(MPTTModel):
     name = models.CharField(max_length=15, unique=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    def __str__(self) -> str:
+        return self.name
 
 class Drink(models.Model):
     category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    featured = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return self.name
 
 class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="products")
@@ -21,11 +25,17 @@ class Product(models.Model):
     featured = models.BooleanField(default=False)
     stores = models.ManyToManyField(Store, through="ProductStoreInfo")
 
+    def __str__(self) -> str:
+        return self.drink.name + " " + self.size
+
 class ProductStoreInfo(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     stock = models.IntegerField()
+
+    def __str__(self) -> str:
+        return self.store.name + " - " + str(self.product)
     
     class Meta:
         ordering = ["price"]

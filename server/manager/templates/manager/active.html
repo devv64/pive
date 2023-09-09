@@ -1,0 +1,26 @@
+{% extends 'manager/main.html' %}
+
+{% block content%}
+<h1>{{from|capfirst}} Orders</h1>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Status</th>
+        <th scope="col">Ordered At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in orders%}
+      <tr>
+        <td><a href="{% url 'order' f=from uuid=i.uuid %}">{{i.name}}</a></td>
+        <td>{{i.address}}</td>
+        <td>{{i.get_status_display}}</td>
+        <td>{{i.ordered_at}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
