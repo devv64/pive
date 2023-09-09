@@ -1,0 +1,18 @@
+{% extends 'manager/main.html' %}
+
+{% block content%}
+
+<h1>Contact Us</h1>
+<form method="POST">
+    {{form.as_p}}
+    {% csrf_token %}
+    {% for message in messages %}
+        <p id="messages" style="color: red">{{message}}</p>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Send</button>
+</form>
+
+
+
+
+{% endblock %}

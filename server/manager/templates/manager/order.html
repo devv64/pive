@@ -1,0 +1,18 @@
+{% extends 'manager/main.html' %}
+
+{% block content%}
+<h1>{{order.name}}</h1>
+{% for i in order_items %}
+    {{i.name}} </br>
+{% endfor %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{form}} <br>
+    {% for message in messages %}
+        <p id="messages">{{message}}</p>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+{% endblock %}

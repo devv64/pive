@@ -1,0 +1,54 @@
+{% extends 'manager/main.html' %}
+
+{% block content%}
+<h1>Drinks in Inventory</h1>
+<form method="get">
+  {{drinkFilter.form}}
+  <button type="submit" class="btn btn-primary" >Enter</button>
+</form>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Drink</th>
+        <th scope="col">Category</th>
+        <th scope="col">
+          
+          
+          
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in drinksInStore%}
+      <tr>
+        <td>{{i.name}}</td>
+        <td>{{i.category}}</td>
+        <td><a class="btn btn-primary" href="{% url 'drink' i.id %}">Edit</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<h1>Drinks not in Inventory</h1>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Drink</th>
+        <th scope="col">Category</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for i in drinksNotInStore %}
+      <tr>
+        <td>{{i.name}}</td>
+        <td>{{i.category}}</td>
+        <td><a class="btn btn-success" href="{% url 'drink' i.id %}">Add</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
