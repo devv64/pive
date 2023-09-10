@@ -10,6 +10,9 @@ class Store(models.Model):
     delivery_distance = models.IntegerField(null=False)
     available = models.BooleanField()
 
+    def __str__(self) -> str:
+        return self.name
+
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store

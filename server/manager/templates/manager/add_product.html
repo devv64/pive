@@ -1,0 +1,18 @@
+{% extends 'manager/main.html' %}
+
+{% block content%}
+
+<h1>{{action}}ing {{product}}</h1>
+<form method="POST">
+    {{form.as_p}}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Save</button>
+    {% if action == "Edit" %}
+<a href="{% url 'delete-size' product.id %}" class="btn btn-danger">Delete Size From Inventory</a>
+{% endif %}
+</form>
+
+
+
+
+{% endblock %}
