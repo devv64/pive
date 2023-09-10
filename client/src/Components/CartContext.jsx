@@ -10,6 +10,7 @@ const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [orderData, setOrderData] = useState({});
   const [stores, setStores] = useState([]);
+  const [address, setAddress] = useState('');
 
   useEffect(() => {
     const savedCartItems = localStorage.getItem('cartItems');
@@ -77,6 +78,16 @@ const CartProvider = ({ children }) => {
     localStorage.removeItem('orderData');
   };
 
+  const addAddress = (address) => {
+    setAddress(address);
+    localStorage.setItem('address', JSON.stringify(address));
+  };
+
+  const clearAddress = () => {
+    setAddress('');
+    localStorage.removeItem('address');
+  };
+
   const addStores = (stores) => {
     setStores(stores);
     localStorage.setItem('stores', JSON.stringify(stores));
@@ -98,6 +109,9 @@ const CartProvider = ({ children }) => {
         orderData,
         addToOrderData,
         clearOrderData,
+        address,
+        addAddress,
+        clearAddress,
         stores,
         addStores,
         clearStores,

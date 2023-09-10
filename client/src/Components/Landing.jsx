@@ -13,7 +13,7 @@ function Landing() {
   });
 
 
-  const { stores, addStores } = useCartContext();
+  const { addStores, addAddress } = useCartContext();
 
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
@@ -21,6 +21,7 @@ function Landing() {
   const handleSearch = async () => {
     const addressInput = document.getElementById('autocomplete').value;
     console.log('addressInput: ', addressInput)
+    addAddress(addressInput);
   
     try {
       const response = await fetch('http://127.0.0.1:8000/stores/nearby-stores/', {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleMap, Marker, Circle, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, CircleF, useLoadScript } from '@react-google-maps/api';
 
 const { MAPS_API_KEY } = require('./config');
 
@@ -15,11 +15,11 @@ const StoreMap = ({ stores }) => {
   if (!isLoaded) return <div>Loading Maps</div>;
 
   const mapContainerStyle = {
-    width: '100%',
-    height: '400px',
+    width: '400px',
+    height: '100vw',
   };
 
-  const center = { lat: 40.9263, lng: -74.0770 }; // Set the initial center of the map
+  const center = { lat: 40.9263, lng: -74.0770 };
 
   return (
     <GoogleMap
@@ -29,8 +29,8 @@ const StoreMap = ({ stores }) => {
     >
       {stores.map((store) => (
         <React.Fragment key={store.id}>
-          <Marker position={{ lat: store.lat, lng: store.lng }} />
-          <Circle
+          <MarkerF position={{ lat: store.lat, lng: store.lng }} />
+          <CircleF
             center={{ lat: store.lat, lng: store.lng }}
             radius={store.deliveryRadius}
             options={{
