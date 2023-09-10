@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { getFeaturedProducts } from './api/products';
-import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo } from './Components';
+import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category } from './Components';
 
 function App() {
   const [data, setData] = useState([]);
@@ -13,6 +13,8 @@ function App() {
         setData(result);
       });
   }, []);
+
+  const homeElement = <MyCarousel title="Featured" products={data} />;
 
   return (
     <CartProvider>
@@ -49,6 +51,10 @@ function App() {
             <Route
               path="/locations"
               element={<Locations />}
+            />
+            <Route
+              path="/category/:category"
+              element={<Category />}
             />
             <Route
               path="*"
