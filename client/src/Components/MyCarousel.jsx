@@ -33,6 +33,9 @@ const MyCarousel = ({ title, products }) => {
           itemsToScroll={6}
           pagination={false}
           renderArrow={renderCustomArrow}
+
+          // TODO: Shift breakpoints to be larger
+          
           breakPoints={[
             { width: 0, itemsToShow: 1, itemsToScroll: 1 },
             { width: 480, itemsToShow: 2, itemsToScroll: 2 },
@@ -47,18 +50,18 @@ const MyCarousel = ({ title, products }) => {
               <div className="carousel-item">
                 <div className="flex flex-col items-center justify-start px-4 py-6 mb-6 bg-white rounded-lg shadow-lg">
                   <img
-                    src={product.product.image_url}
-                    alt={product.name}
+                    src={product.image_url}
+                    alt={product.drink_name}
                     className="w-32 h-48 object-contain mb-4 rounded-lg"
                   />
                   <h3 className="text-sm font-semibold leading-tight mb-2">
-                    {product.name}
+                    {product.drink_name}
                   </h3>
                   <h3 className="text-sm leading-tight mb-2">
                     {product.size}
                   </h3>
                   <p className="text-sm font-medium text-gray-600">
-                    ${product.product.price}
+                    ${product.carrying_stores[0].price}
                   </p>
                 </div>
               </div>

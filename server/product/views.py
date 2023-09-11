@@ -108,8 +108,8 @@ def get_drink_by_id(request, id):
     
 @api_view(['GET'])
 def get_carousel_featured_drinks(request):
-    drinks = Drink.objects.filter(featured=True)
-    serializer = LightDrinkSerializer(drinks, many=True)
+    drinks = Product.objects.filter(featured=True)
+    serializer = ProductSerializer(drinks, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

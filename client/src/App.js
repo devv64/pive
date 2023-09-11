@@ -30,7 +30,7 @@ function App() {
             />
             <Route
               path="/home"
-              element={<MyCarousel title="Featured" products={data} />}
+              element={homeElement}
             />
             <Route
               path="/products"

@@ -22,8 +22,8 @@ export async function getProductbyId(productId) {
   }
 
 
-  export async function getCategory(category) {
-    const api = `http://127.0.0.1:8000/drinks/category/${category}`;
+  export async function getCategory(category, page) {
+    const api = `http://127.0.0.1:8000/drinks/category_products/${category}/${page}`;
 
     try {
         const res = await fetch(api);
