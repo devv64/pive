@@ -86,7 +86,7 @@ def get_by_id(request, id):
     return Response(data)
 
 @api_view(['GET'])
-def get_carousel_drinks_by_category(request, category):
+def get_carousel_drinks_by_category(request, category): #! Store filter
     try:
         categories = Category.objects.get(name=category).get_descendants(include_self=True)
         for c in categories:
@@ -107,13 +107,13 @@ def get_drink_by_id(request, id):
         return Response({"error":"Drink not found"}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['GET'])
-def get_carousel_featured_drinks(request):
+def get_carousel_featured_drinks(request): #! Store Filter
     drinks = Drink.objects.filter(featured=True)
     serializer = LightDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_autocomplete_results(request, query):
+def get_autocomplete_results(request, query): #! Store filter??
 
     vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
     search_query = SearchQuery(query)
@@ -137,7 +137,7 @@ def get_autocomplete_results(request, query):
     return Response(res)
 
 @api_view(['GET'])
-def get_query_results(request, query, page_num):
+def get_query_results(request, query, page_num): #! Store filter
 
     vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
     search_query = SearchQuery(query)
@@ -160,8 +160,14 @@ def get_query_results(request, query, page_num):
     return Response(resp) #so what are we returning here, the list of
 
 @api_view(['GET'])
-def get_category_results(request, category, page_num):
-    categories = Category.objects.get(name=category).get_siblings(include_self=True)
+def get_category_results(request, category, page_num): #! Store filter
+    c = Category.objects.get(name=category)
+
+    if c.is_leaf_node():
+        categories = c.get_siblings(include_self=True) # Grabs Siblings: Request for red wines will also output white wines after all the red wines
+    else:
+        categories = c.get_descendants(include_self=True) # Request for Non-leaf node e.g. Wine will grab children: Red Wine and White Wine
+
     drinks = Drink.objects.filter(category__in = categories).order_by('category')
 
     items_per_page = 20 #? make this a parameter?
