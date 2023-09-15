@@ -12,23 +12,31 @@ const AddressInfo = () => {
     libraries,
   });
 
-  const { address,addAddress } = useCartContext();
+  const { addAddress } = useCartContext();
 
   const handleAddressChange = (event) => {
-    const newAddress = event.target.value;
-    addAddress(newAddress);
+    const addressInput = document.getElementById('address').value;
+    console.log('addressInput: ', addressInput)
+    addAddress(addressInput);
+
   };
+
+  const address = localStorage.getItem('address').slice(1, -1);
+
+  console.log(address);
 
   return (
     <div>
       <div>
         <strong>Delivery Address:</strong>
         <input
+          id="address"
           type="text"
-          value={address}
-          onChange={handleAddressChange}
+          // value={address}
+          // onSubmit={handleAddressChange}
           placeholder={address}
         />
+        <button onClick={handleAddressChange}>Change</button>
       </div>
     </div>
   );
