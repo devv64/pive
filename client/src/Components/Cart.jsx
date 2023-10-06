@@ -40,6 +40,10 @@ const Cart = () => {
     };
   }, []);
 
+  const isCheckoutEnabled = () => {
+    return cartItems.length > 0;
+  }
+
   return (
     <div className="relative ml-4" ref={cartRef}>
       <button
@@ -55,12 +59,12 @@ const Cart = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
-          className="absolute right-0 mt-2 p-4 bg-white shadow-lg rounded-lg z-10"
+          className="absolute right-0 min-w-[200px] mt-2 p-4 bg-white shadow-lg rounded-lg z-10"
         >
           <h3 className="text-lg font-semibold mb-4">Your Cart</h3>
           <ul className="list-none p-0 m-0">
             {cartItems.map((item) => (
-              <li key={item.id} className="flex items-center justify-between border-b border-gray-300 py-2">
+              <li key={item.id} className="flex items-center w-[300px] justify-between border-b border-gray-300 py-2">
                 <select
                   id={`quantity-${item.id}`}
                   className="border rounded-lg px-2 py-1 text-sm focus:outline-none"
@@ -82,11 +86,20 @@ const Cart = () => {
               </li>
             ))}
           </ul>
+          <hr className="my-4 border-0" />
+          <div className="flex items-center justify-between">
+            <span className="text-lg font-semibold">Total</span>
+            <span className="text-lg font-semibold">
+              ${cartItems.reduce((total, item) => total + item.object.price_data.unit_amount / 100 * item.object.quantity, 0)}
+            </span>
+          </div>
+          { isCheckoutEnabled() && (
           <Link key="checkout" to='/checkout' onClick={hideCart}>
             <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full mt-4 focus:outline-none">
               Checkout
             </button>
           </Link>
+            )}
         </motion.div>
       )}
     </div>

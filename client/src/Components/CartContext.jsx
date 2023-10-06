@@ -65,6 +65,15 @@ const CartProvider = ({ children }) => {
       }
       return item;
     }));
+    
+    const updatedCartItems = cartItems.map((item) => {
+      if (item.id === id) {
+        return { ...item, object: { ...item.object, quantity: quantity } };
+      }
+      return item;
+    });
+
+    localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
   };
 
   const addToOrderData = (data) => {

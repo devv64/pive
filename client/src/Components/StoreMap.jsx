@@ -15,8 +15,8 @@ const StoreMap = ({ stores }) => {
   if (!isLoaded) return <div>Loading Maps</div>;
 
   const mapContainerStyle = {
-    width: '400px',
-    height: '100vw',
+    width: '100vw',
+    height: '400px',
   };
 
   const center = { lat: 40.9263, lng: -74.0770 };
