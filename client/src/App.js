@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { getFeaturedProducts } from './api/products';
 import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category } from './Components';
 
@@ -22,7 +22,7 @@ function App() {
         <div className="App">
           <Navbar />
           <div className="mb-40"></div>
-          <AddressInfo />
+          <MyAddressInfo />
           <Routes>
             <Route
               path="/"
@@ -65,6 +65,16 @@ function App() {
       </Router>
     </CartProvider>
   );
+}
+
+function MyAddressInfo() {
+  const location = useLocation();
+
+  if (location.pathname === '/') {
+    return null;
+  }
+
+  return <AddressInfo />;
 }
 
 export default App;

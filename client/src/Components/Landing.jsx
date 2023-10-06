@@ -12,17 +12,17 @@ function Landing() {
     libraries,
   });
 
+  const { stores, addStores, clearStores, addAddress, clearAddress } = useCartContext();
 
-  const { addStores, addAddress } = useCartContext();
+  clearAddress();
 
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
 
   const handleSearch = async () => {
     const addressInput = document.getElementById('autocomplete').value;
-    console.log('addressInput: ', addressInput)
     addAddress(addressInput);
-  
+
     try {
       const response = await fetch('http://127.0.0.1:8000/stores/nearby-stores/', {
         method: 'POST',
@@ -31,28 +31,33 @@ function Landing() {
         },
         body: JSON.stringify({ address: addressInput }),
       });
-  
-      const data = await response.json();
-      console.log('data: ', data);
 
+      const data = await response.json();
+
+      clearStores();
       addStores(data.all);
-  
+
       if (data.all && data.all.length === 0) {
         window.location.href = '/locations';
       } else {
         window.location.href = `/home`;
       }
-      
     } catch (error) {
       console.error('Error fetching stores:', error);
     }
   };
 
+  const storedAddress = localStorage.getItem('address');
+
   return (
     <div>
       Landing
       <Autocomplete>
-        <input id="autocomplete" placeholder="Enter delivery address" type="text" />
+        <input
+          id="autocomplete"
+          placeholder={storedAddress ? storedAddress.slice(1, -1) : "Enter delivery address"}
+          type="text"
+        />
       </Autocomplete>
       <div>
         <button onClick={handleSearch}>Search</button>

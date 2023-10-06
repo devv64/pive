@@ -1,42 +1,23 @@
 import React from 'react';
-import { useCartContext } from './CartContext';
-import { useLoadScript, Autocomplete } from '@react-google-maps/api';
-
-const { MAPS_API_KEY } = require('./config');
 
 const libraries = ['places'];
+
 const AddressInfo = () => {
-
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: MAPS_API_KEY,
-    libraries,
-  });
-
-  const { addAddress } = useCartContext();
-
-  const handleAddressChange = (event) => {
-    const addressInput = document.getElementById('address').value;
-    console.log('addressInput: ', addressInput)
-    addAddress(addressInput);
-
-  };
-
-  const address = localStorage.getItem('address').slice(1, -1);
-
-  console.log(address);
+  const address = localStorage.getItem('address')?.slice(1, -1);
 
   return (
-    <div>
+    <div className="bg-white p-4">
       <div>
-        <strong>Delivery Address:</strong>
-        <input
-          id="address"
-          type="text"
-          // value={address}
-          // onSubmit={handleAddressChange}
-          placeholder={address}
-        />
-        <button onClick={handleAddressChange}>Change</button>
+        <strong className="block text-xl mb-2">Delivery Address:</strong>
+        <div className="text-lg mb-4">{address}</div>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          onClick={() => {
+            window.location.href = '/';
+          }}
+        >
+          Change Address
+        </button>
       </div>
     </div>
   );
