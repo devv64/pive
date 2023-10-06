@@ -14,7 +14,7 @@ function Landing() {
 
   const { stores, addStores, clearStores, addAddress, clearAddress } = useCartContext();
 
-  clearAddress();
+  // clearAddress();
 
   if (loadError) return 'Error loading maps';
   if (!isLoaded) return 'Loading Maps';
