@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { getFeaturedProducts } from './api/products';
-import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category } from './Components';
+import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category, SearchResults } from './Components';
 
 function App() {
   const [data, setData] = useState([]);
@@ -55,6 +55,10 @@ function App() {
             <Route
               path="/category/:category"
               element={<Category />}
+            />
+            <Route
+              path="/search/:search"
+              element={<SearchResults />}
             />
             <Route
               path="*"

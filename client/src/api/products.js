@@ -33,3 +33,15 @@ export async function getProductbyId(productId) {
         console.log(error);
     }
   }
+
+  export async function getSearchResults(search, page) {
+      const api = `http://127.0.0.1.8000/drinks/search_products/${search}/${page}`;
+
+      try {
+          const res = await fetch(api);
+          return await res.json();
+      }
+      catch (error) {
+          console.log(error);
+      }
+  }

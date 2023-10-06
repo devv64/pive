@@ -32,9 +32,12 @@ const Navbar = () => {
   }, [searchInput]);
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && suggestions?.length > 0) {
-      const topSuggestion = suggestions[0];
-      window.location.href = `/products/${topSuggestion.id}`;
+    if (e.key === 'Enter' && searchInput.trim().length > 0) {
+
+      window.location.href = `/search/${encodeURIComponent(searchInput)}`;
+
+      // const topSuggestion = suggestions[0];
+      // window.location.href = `/products/${topSuggestion.id}`;
     }
   };
 
