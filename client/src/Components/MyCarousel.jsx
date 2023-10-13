@@ -24,6 +24,7 @@ const MyCarousel = ({ title, products }) => {
     );
   };
 
+  console.log('products: ', products)
   return (
     <div className="carousel-container mb-6">
       <h2 className="carousel-title text-2xl font-bold mb-2">{title}</h2>
