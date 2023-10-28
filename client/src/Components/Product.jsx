@@ -33,6 +33,8 @@ const Product = () => {
     setSelectedSize(sizeProduct);
   };
 
+  console.log('selectedProduct: ', selectedProduct)
+
   return (
     <div className="flex flex-col items-center justify-center mt-8">
       <h3 className="text-lg font-semibold mb-2">Category: {selectedProduct.name}</h3>

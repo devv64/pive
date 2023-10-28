@@ -16,3 +16,8 @@ Untracked files:
 	client/src/Components/SearchResult.jsx
 
 no changes added to commit (use "git add" and/or "git commit -a")
+[dev 5408b57] Changed SearchResults - and made progress on basic layout and design
+ 7 files changed, 59 insertions(+), 34 deletions(-)
+ create mode 100644 SearchResult
+ create mode 100644 client/src/Components/SearchResult.jsx
+ delete mode 100644 client/src/Components/SearchResults.jsx
