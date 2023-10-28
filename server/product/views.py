@@ -107,9 +107,9 @@ def get_drink_by_id(request, id):
         return Response({"error":"Drink not found"}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['GET'])
-def get_carousel_featured_drinks(request):
-    drinks = Product.objects.filter(featured=True)
-    serializer = ProductSerializer(drinks, many=True)
+def get_carousel_featured_drinks(request): #! Store Filter
+    drinks = Drink.objects.filter(featured=True)
+    serializer = LightDrinkSerializer(drinks, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])

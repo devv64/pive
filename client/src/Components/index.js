@@ -9,4 +9,4 @@ export { default as Product } from './Product';
 export { default as Locations } from './Locations';
 export { default as AddressInfo } from './AddressInfo';
 export { default as Category } from './Category';
-export { default as SearchResults } from './SearchResults';
+export { default as SearchResult } from './SearchResult';
