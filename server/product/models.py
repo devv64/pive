@@ -14,6 +14,7 @@ class Drink(models.Model):
     category = TreeForeignKey(Category, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     description = models.TextField()
+    featured = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.name
@@ -22,7 +23,7 @@ class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="products")
     size = models.CharField(max_length=30)
     image_url = models.CharField(max_length=300) 
-    featured = models.BooleanField(default=False)
+    # featured = models.BooleanField(default=False)
     stores = models.ManyToManyField(Store, through="ProductStoreInfo")
 
     def __str__(self) -> str:
