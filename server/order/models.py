@@ -26,10 +26,10 @@ class Order(models.Model):
         items = self.order_items.all()
         for item in items:
             storeinfo = ProductStoreInfo.objects.get(store=self.store, product=item.product_id)
-            print(storeinfo.stock)
+            # print(storeinfo.stock)
             storeinfo.stock -= item.quantity
             storeinfo.save()
-            print(storeinfo.stock)
+            # print(storeinfo.stock)
     
     def update_status(self, new_status):
         self.status = new_status

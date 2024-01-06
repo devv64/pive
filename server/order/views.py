@@ -31,7 +31,7 @@ def create_checkout_session(request):
         return Response(e.detail, status=status.HTTP_418_IM_A_TEAPOT)
     
     line_items_data = reformat_for_stripe(data)
-
+    print(order.id)
 
     DOMAIN = "http://localhost:3000"
     try: 
@@ -43,6 +43,7 @@ def create_checkout_session(request):
             expires_at = (int(time.time()) + 1800),
             metadata = {"order_id":order.id}
         )
+        print(checkout_session.metadata)
     except Exception as e:
         print(str(e))
         return Response({"error":"stripe internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -79,6 +80,7 @@ def create_order(request):
 
 @csrf_exempt
 def stripe_payment_webhook(request):
+    print("webhook called")
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
@@ -93,12 +95,12 @@ def stripe_payment_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return HttpResponse(status=400)
-    print(event)
-    order = Order.objects.get(pk=event['data']['object']['metadata']['order_id'])
-    
+    print(event['type'])
     if event['type'] == "checkout.session.completed":
+        order = Order.objects.get(pk=event['data']['object']['metadata']['order_id'])
         order.confirm_payed_order()
     elif event['type'] == "checkout.session.expired":
+        order = Order.objects.get(pk=event['data']['object']['metadata']['order_id'])
         order.set_expired()
 
     return HttpResponse(status=200)
