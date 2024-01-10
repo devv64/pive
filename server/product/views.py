@@ -115,20 +115,22 @@ def get_carousel_featured_drinks(request): #! Store Filter
 @api_view(['GET'])
 def get_autocomplete_results(request, query): #! Store filter??
 
-    vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
-    search_query = SearchQuery(query)
+    # vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+    # search_query = SearchQuery(query)
 
-    drinks = Drink.objects.annotate(rank=SearchRank(vector, search_query), 
-                                    similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")
-                                    ).filter(Q(rank__gte=0.3) | Q(similarity__gt=0.8)
-                                             ).order_by('-rank')
+    # drinks = Drink.objects.annotate(rank=SearchRank(vector, search_query), 
+    #                                 similarity=TrigramWordSimilarity(query,"name") + TrigramWordSimilarity(query,"description")
+    #                                 ).filter(Q(rank__gte=0.3) | Q(similarity__gt=0.8)
+    #                                          ).order_by('-rank')
 
-    # drinks = Drink.objects.annotate(similarity_name=TrigramWordSimilarity(query,"name"),).filter(similarity_name__gt=0.3).order_by("-similarity_name")
-    # desc_drinks = Drink.objects.annotate(similarity_desc=TrigramWordSimilarity(query,"description"),).filter(similarity_desc__gt=0.8).order_by("-similarity_desc")
 
-    # for d in drinks:
-    #     print(d.name)
+    # drinks = Drink.objects.filter(name__icontains=query, description__icontains=query)
+    # Fetch all drinks
+    drinks = Drink.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+    
     res = []
+    print(len(drinks))
     for d in drinks:
         res.append({
             "id":d.id,
