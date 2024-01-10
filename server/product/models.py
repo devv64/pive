@@ -23,7 +23,7 @@ class Product(models.Model):
     drink = models.ForeignKey(Drink, on_delete=models.CASCADE, related_name="products")
     size = models.CharField(max_length=30)
     image_url = models.CharField(max_length=300) 
-    # featured = models.BooleanField(default=False)
+    image = models.ImageField(upload_to="product_images", null=True, blank=True)
     stores = models.ManyToManyField(Store, through="ProductStoreInfo")
 
     def __str__(self) -> str:

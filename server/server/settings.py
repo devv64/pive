@@ -20,10 +20,10 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!dlj=t+@8p2!(ulj&5xcmtt^21c+_#w#v)4zj8ffu)iml@w#o('
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -98,12 +98,8 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'template1',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv("POST_PASS"),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -144,6 +140,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_ROOT = 'media/'
+MEDIA_URL = os.path.join(BASE_DIR, 'media/')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -154,4 +153,4 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'pive.contact@gmail.com'
-EMAIL_HOST_PASSWORD = 'ogexrwxlroxgotvz' #! HIDE
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
