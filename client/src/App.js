@@ -5,13 +5,13 @@ import { getFeaturedProducts } from './api/products';
 import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category, SearchResult } from './Components';
 
 function App() {
-  function useQuery() {
-    const { search } = useLocation();
+  // function useQuery() {
+  //   const { search } = useLocation();
   
-    return useMemo(() => new URLSearchParams(search), [search]);
-  }
+  //   return useMemo(() => new URLSearchParams(search), [search]);
+  // }
 
-  const query = useQuery();
+  // const query = useQuery();
 
   const [data, setData] = useState([]);
 
@@ -24,13 +24,15 @@ function App() {
 
   const homeElement = <MyCarousel title="Featured" products={data} />;
 
+  console.log("hello");
+
   return (
     <CartProvider>
       <Router>
         <div className="App">
           <Navbar />
           <div className="mb-40"></div>
-          <MyAddressInfo />
+          {/* <MyAddressInfo /> */}
           <Routes>
             <Route
               path="/"
@@ -50,7 +52,7 @@ function App() {
             />
             <Route
               path="/checkout"
-              cancelled={query.get("cancelled") === "true"}
+              // cancelled={query.get("cancelled") === "true"}
               element={<Checkout />}
             />
             <Route
@@ -80,14 +82,14 @@ function App() {
   );
 }
 
-function MyAddressInfo() {
-  const location = useLocation();
+// function MyAddressInfo() {
+//   const location = useLocation();
 
-  if (location.pathname === '/') {
-    return null;
-  }
+//   if (location.pathname === '/') {
+//     return null;
+//   }
 
-  return <AddressInfo />;
-}
+//   return <AddressInfo />;
+// }
 
 export default App;
