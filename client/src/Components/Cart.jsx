@@ -90,7 +90,7 @@ const Cart = () => {
           <div className="flex items-center justify-between">
             <span className="text-lg font-semibold">Total</span>
             <span className="text-lg font-semibold">
-              ${cartItems.reduce((total, item) => total + item.object.price_data.unit_amount / 100 * item.object.quantity, 0)}
+              ${cartItems.reduce((total, item) => total + item.object.price_data.unit_amount / 100 * item.object.quantity, 0).toFixed(2)}
             </span>
           </div>
           { isCheckoutEnabled() && (

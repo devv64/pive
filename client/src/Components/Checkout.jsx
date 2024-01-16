@@ -99,7 +99,7 @@ const DeliveryInfoSection = () => {
   );
 };
 
-const Checkout = () => {
+const Checkout = ( cancelled ) => {
   const { cartItems, addToOrderData } = useCartContext();
 
   const [contactInfo, setContactInfo] = useState({
@@ -119,7 +119,6 @@ const Checkout = () => {
     const order_items = cartItems.map((item) => {
       return {
         product_id: item.id,
-        store_id: item.store_id,
         quantity: item.object.quantity,
         name: item.object.price_data.product_data.name,
         price: item.object.price_data.unit_amount / 100,
@@ -132,6 +131,7 @@ const Checkout = () => {
       name: contactInfo.firstName + ' ' + contactInfo.lastName,
       phone: contactInfo.phoneNumber,
       email: contactInfo.email,
+      store: 1,
       order_items: order_items,
     }
 
@@ -140,11 +140,11 @@ const Checkout = () => {
     try {
       // Send the POST request to your backend view using axios
       const response = await axios.post('http://127.0.0.1:8000/order/stripe_session', checkoutData);
-      const { id } = response.data;
+      const { url } = response.data;
   
       // Redirect the user to the Stripe checkout page using the 'id' returned from the backend
-      if (id) {
-        window.location.href = `https://checkout.stripe.com/c/pay/${id}#fidkdWxOYHwnPyd1blpxYHZxWjA0S1JzX0RGTz1jc25cb2MzQVFVQV9VQTJLS05pMFw0R01WfXZHVVVVPH8wb3ZEZHRDfXRMbV1DMlxOdEFWU31HSlJGf0N0PXM0c3JcXDVyZnRzdWhDY302NTU3dHNAVz1rMycpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl`;
+      if (url) {
+        window.location.href = url
       } else {
         console.error('Error: Unable to retrieve the Stripe checkout session URL.');
       }

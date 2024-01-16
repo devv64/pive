@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='order',
             name='status',
-            field=models.CharField(choices=[('a', 'Awaiting Payment'), ('p', 'Pending'), ('o', 'Out for Delivery'), ('d', 'Delivered'), ('c', 'Canceled')], default='a', max_length=10),
+            field=models.CharField(choices=[('a', 'Awaiting Payment'), ('p', 'Pending'), ('o', 'Out for Delivery'), ('d', 'Delivered'), ('c', 'Cancelled')], default='a', max_length=10),
         ),
         migrations.AlterField(
             model_name='orderitem',

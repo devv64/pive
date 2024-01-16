@@ -1,10 +1,18 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { getFeaturedProducts } from './api/products';
 import { Navbar, MyCarousel, Product, Checkout, CartProvider, Landing, OrderConfirmation, Locations, AddressInfo, Category, SearchResult } from './Components';
 
 function App() {
+  function useQuery() {
+    const { search } = useLocation();
+  
+    return useMemo(() => new URLSearchParams(search), [search]);
+  }
+
+  const query = useQuery();
+
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -42,6 +50,7 @@ function App() {
             />
             <Route
               path="/checkout"
+              cancelled={query.get("cancelled") === "true"}
               element={<Checkout />}
             />
             <Route

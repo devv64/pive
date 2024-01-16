@@ -39,7 +39,7 @@ def create_checkout_session(request):
             line_items = line_items_data,
             mode='payment',
             success_url= DOMAIN + "/order-confirmation?success=true&order_id=" + str(order.uuid),
-            cancel_url=DOMAIN + "/checkout?canceled=true",
+            cancel_url=DOMAIN + "/checkout?cancelled=true",
             expires_at = (int(time.time()) + 1800),
             metadata = {"order_id":order.id}
         )
@@ -48,7 +48,7 @@ def create_checkout_session(request):
         print(str(e))
         return Response({"error":"stripe internal error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     print(checkout_session.url)
-    return JsonResponse({'id': checkout_session.id})
+    return JsonResponse({'url': checkout_session.url})
 
 def reformat_for_stripe(data):
     line_item_data = []

@@ -47,26 +47,27 @@ const MyCarousel = ({ title, products }) => {
           transitionMs={1000}
           enableMouseSwipe={false}
         >
-          {products.map((product) => (
-            <Link key={product.id} to={`/products/${product.id}`}>
+          {products.map((drink) => (
+            <Link key={drink.id} to={`/products/${drink.id}`}>
               <div className="carousel-item">
                 <div className="flex flex-col items-center justify-start px-4 py-6 mb-6 bg-white rounded-lg shadow-lg">
                   {/* Make this img tag a div bg-image-[] bg-contain */}
                   <img
-                    src={product.image_url}
-                    alt={product.drink_name}
+                    src={drink.product.image_url}
+                    alt={drink.name}
                     className="w-32 h-48 object-contain mb-4 rounded-lg"
                   />
                   {/* Put this stuff below in a div */}
                   <div className=''  >
                     <h3 className="text-sm font-semibold leading-tight mb-2">
-                      {product.drink_name}
+                      {drink.name}
                     </h3>
                     <h3 className="text-sm leading-tight mb-2">
-                      {product.size}
+                      {drink.product.size}
                     </h3>
                     <p className="text-sm font-medium text-gray-600">
-                      ${product.carrying_stores[0].price}
+                      {/* ${drink.carrying_stores[0].price} */}
+                      ${drink.product.price}
                     </p>
                   </div>
                 </div>
